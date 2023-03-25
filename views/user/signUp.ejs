@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>E-Football Register</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/user/styleSheet/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/style.css" type="text/css">
+    <link rel="stylesheet" href="/user/styleSheet/sign-up.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p>Free shipping, 30-day return or refund guarantee.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <a href="/"><img src="/user/assets/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
+    <section>
+        <div class="col-lg-6 col-md-6 register">
+            <h1>Register</h1>
+            <div class="contact__form">
+                <% if(typeof message !=='undefined' ){%>
+                    <p style="color: red;">
+                        <%= message %>
+                    </p>
+                    <% } %>
+                        <form action="/register" method="post">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" id="userName" name="name" placeholder="User Name" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="email" id="email" name="email" placeholder="Email" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" id="mobileNumber" name="mobile" placeholder="Phone" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="password" id="password" name="password" placeholder="Password"
+                                        required>
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="site-btn">Send OTP</button>
+                                </div>
+                            </div>
+                        </form>
+            </div>
+            <p><a href="/login">Already member</a></p>
+        </div>
+    </section>
+</body>
+
+<script src="/user/javaScript/jquery-3.3.1.min.js"></script>
+<script src="/user/javaScript/bootstrap.min.js"></script>
+<script src="/user/javaScript/jquery.nice-select.min.js"></script>
+<script src="/user/javaScript/jquery.nicescroll.min.js"></script>
+<script src="/user/javaScript/jquery.magnific-popup.min.js"></script>
+<script src="/user/javaScript/jquery.countdown.min.js"></script>
+<script src="/user/javaScript/jquery.slicknav.js"></script>
+<script src="/user/javaScript/mixitup.min.js"></script>
+<script src="/user/javaScript/owl.carousel.min.js"></script>
+<script src="/user/javaScript/main.js"></script>
+<script>
+
+
+    const userName = document.getElementById('userName')
+    const number = document.getElementById('mobileNumber')
+    const password = document.getElementById('password')
+    const button = document.querySelector('button[type=submit]')
+
+    // User Name
+    userName.addEventListener('input',()=>{
+        if(userName.value.trim().length < 3){
+            userName.setCustomValidity("Minimum 3 Charecters Required")
+        }else{
+            userName.setCustomValidity("")
+        }
+    })
+    // Mobile Number
+    number.addEventListener("input", () => {
+        if (number.value.trim().length = 0) {
+            number.setCustomValidity('Mobile Number Required')
+        } else if (number.value.trim().length < 10) {
+            number.setCustomValidity('Mobile Number less than 10')
+        } else if (number.value.trim().length > 10) {
+            number.setCustomValidity('Mobile Number greater than 10')
+        } else {
+            number.setCustomValidity("")
+        }
+    })
+
+    // Password
+    password.addEventListener('input', () => {
+        if (password.value.trim().length = 0) {
+            password.setCustomValidity("Password Cannot be Null")
+        }else if(password.value.trim().length < 8){
+            password.setCustomValidity("Minimus 8 charecters required")
+        }else{
+            password.setCustomValidity("")
+        }
+    })
+</script>
+
+</html>

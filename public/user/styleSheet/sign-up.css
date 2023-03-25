@@ -1,0 +1,54 @@
+.register {
+  position: absolute;
+  left: 20%;
+  width: 100%;
+  background: #d9d9d9;
+
+}
+
+section {
+  width: 100%;
+  background-color: #d9d9d9;
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+}
+
+.register p {
+  margin-top: 1rem;
+  color: #e53637;
+}
+
+.register h1 {
+  font-size: 20px;
+  color: #000000;
+  font-weight: 900;
+  border: none;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 14px 100px;
+}
+
+.register p a {
+  text-decoration: none;
+  
+  color: #365fe5;
+}
+/* 
+#name-required{
+  display: none;
+}
+
+#email-required{
+  display: none;
+}
+
+#mobile-required{
+  display: none;
+}
+
+#password-required{
+  display: none;
+} */

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Male_Fashion Template">
+  <meta name="keywords" content="Male_Fashion, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>E-Football Login</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Css Styles -->
+  <link rel="stylesheet" href="/user/styleSheet/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/elegant-icons.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/magnific-popup.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/style.css" type="text/css">
+  <link rel="stylesheet" href="/user/styleSheet/login.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <div class="offcanvas-menu-overlay"></div>
+  <div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__option">
+
+
+    </div>
+    <div class="offcanvas__nav__option">
+      <a href="#" class="search-switch"><img src="/user/assets/img/icon/search.png" alt=""></a>
+      <a href="#"><img src="/user/assets/img/icon/heart.png" alt=""></a>
+      <a href="#"><img src="/user/assets/img/icon/cart.png" alt=""> <span>0</span></a>
+      <div class="price">$0.00</div>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    <div class="offcanvas__text">
+      <p>Free shipping, 30-day return or refund guarantee.</p>
+    </div>
+  </div>
+  <!-- Offcanvas Menu End -->
+
+  <!-- Header Section Begin -->
+  <header class="header">
+    <div class="header__top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-7">
+            <div class="header__top__left">
+              <p>Free shipping, 30-day return or refund guarantee.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-3">
+          <div class="header__logo">
+            <a href="/"><img src="/user/assets/img/logo.png" alt=""></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas__open"><i class="fa fa-bars"></i></div>
+    </div>
+  </header>
+  <!-- Header Section End -->
+  <section>
+
+    <div class="col-lg-6 col-md-6 login">
+      <h1>OTP</h1>
+      <div class="contact__form">
+        <% if(typeof message !=='undefined' ){%>
+          <p style="color: red;">
+            <%= message %>
+          </p>
+          <% } %>
+            <form action="/otp" method="post">
+              <div class="row">
+                <div class="col-6">
+                  <input type="number" id="mobileOtp" name="mobileOtp" placeholder="Enter Veification Code" required>
+                </div>
+                <div class="col-4">
+                  <button type="submit" class="site-btn">Verify</button>
+                </div>
+              </div>
+            </form>
+      </div>
+      
+    </div>
+  </section>
+</body>
+
+<script src="/user/styleSheet/jquery-3.3.1.min.js"></script>
+<script src="/user/styleSheet/bootstrap.min.js"></script>
+<script src="/user/styleSheet/jquery.nice-select.min.js"></script>
+<script src="/user/styleSheet/jquery.nicescroll.min.js"></script>
+<script src="/user/styleSheet/jquery.magnific-popup.min.js"></script>
+<script src="/user/styleSheet/jquery.countdown.min.js"></script>
+<script src="/user/styleSheet/jquery.slicknav.js"></script>
+<script src="/user/styleSheet/mixitup.min.js"></script>
+<script src="/user/styleSheet/owl.carousel.min.js"></script>
+<script src="/user/styleSheet/main.js"></script>
+
+</html>
