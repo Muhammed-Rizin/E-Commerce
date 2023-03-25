@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 const { Session } = require('express-session');
 const nodemailer = require('nodemailer')
 const randomString = require('randomstring')
-
+let dotenv=require("dotenv")
+dotenv.config()
 
 const accountSid = 'ACac7de309c8689dad97ea9d83861c330a';
-const authToken = 'ed877915a5d1f60bd5edbf824f632bad';
+const authToken = 'bbe070e7ae6d7ce19c2a3c41d1125792';
 const client = require('twilio')(accountSid, authToken);
 
 //bcypt
@@ -20,20 +21,20 @@ const securePassword = async (password) => {
 }
 
 // Verify Email
-const sendVerifyMail = async (name,email,user_id)=>{
+const sendVerifyMail = async (name,email)=>{
     const transporter = nodemailer.createTransport({
         host:'smtp.gmail.com',
         post: 587,
         secure: false,
         requireTLS:true,
         auth:{
-            user: 'rizin7427@gmail.com',
-            pass: 'cayq jbih qnfz fhfz'
+            user: process.env.email,
+            pass: process.env.code
         }
     })
 
     const mailOption = {
-        from: 'rizin7427@gmail.com',
+        from: process.env.email,
         to: email,
         subject: 'For Email Verification',
         html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/verify?name='+name+'"> Verify <a> your mail </p>'
@@ -247,13 +248,13 @@ const sendResetPasswordMail = async (name,email,token)=>{
             secure: false,
             requireTLS:true,
             auth:{
-                user: 'rizin7427@gmail.com',
-                pass: 'cayq jbih qnfz fhfz'
+                user: process.env.email,
+                pass: process.env.code
             }
         })
     
         const mailOption = {
-            from: 'rizin7427@gmail.com',
+            from: process.env.email,
             to: email,
             subject: 'For Change Password',
             html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/resetpass?token='+token+'"> Reset <a> your Password </p>'

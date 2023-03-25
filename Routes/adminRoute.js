@@ -1,6 +1,7 @@
 const express = require('express')
 const adminRoute = express()
 const adminController = require('../controller/adminController')
+const category = require('../controller/categoryManagment')
 const session = require('../middleware/adminSession')
 
 
@@ -16,5 +17,8 @@ adminRoute.get('/logout',adminController.logOut)
 
 // Product 
 adminRoute.get('/products',session.Logged,adminController.products)
+
+// Category
+adminRoute.get('/category',session.Logged,category.category)
 
 module.exports =adminRoute
