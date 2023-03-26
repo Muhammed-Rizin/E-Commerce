@@ -6,6 +6,7 @@ const path = require('path')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const bcrypr = require('bcrypt')
+const oneDay = 1000 * 60 * 60 * 24;
 
 app.use(Express.json())
 app.use(Express.static(path.join(__dirname,'./public')))
@@ -14,7 +15,7 @@ app.set("views")
 app.set('view engine' , 'ejs')
 
 //Session
-app.use(session({secret:'rizin',saveUninitialized:true,resave:false,cookie:({maxAge:120000})}))
+app.use(session({secret:'rizin',saveUninitialized:true,resave:false,cookie:({maxAge:oneDay})}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 

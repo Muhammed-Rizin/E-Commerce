@@ -52,20 +52,9 @@ const logOut = (req,res) => {
         console.log(error.message);
     }
 }
-
-// Products
-const products = (req,res) => {
-    try {
-        res.render('admin/products')
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 module.exports ={
     loadHome,
     loadLogin,
     postLogin,
-    logOut,
-    products
+    logOut
 }

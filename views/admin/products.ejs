@@ -29,12 +29,26 @@
 
     <!-- Template Stylesheet -->
     <link href="/admin/styleSheet/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+
+
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#categorytable').DataTable();
+        });
+    </script>
 </head>
 
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div id="spinner"
+            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
@@ -50,8 +64,11 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="/admin/assets/img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                        <img class="rounded-circle" src="/admin/assets/img/user.jpg" alt=""
+                            style="width: 40px; height: 40px;">
+                        <div
+                            class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+                        </div>
                     </div>
                     <div class="ms-3">
                         <h6 class="mb-0">Rizin </h6>
@@ -59,8 +76,10 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="/admin/products" class="nav-item nav-link active"><i class="fa fa-laptop me-2"></i>Products</a>
+                    <a href="/admin/dashboard" class="nav-item nav-link "><i
+                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/products" class="nav-item nav-link active"><i
+                            class="fa fa-laptop me-2"></i>Products</a>
                     <a href="/admin/category" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
                 </div>
             </nav>
@@ -72,7 +91,7 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="/admin/products" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -82,8 +101,8 @@
                     <input class="form-control border-0" type="search" placeholder="Search">
                 </form>
                 <div class="navbar-nav align-items-center ms-auto">
-                    
-                    
+
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <span class="d-none d-lg-inline-flex">Admin</span>
@@ -98,81 +117,77 @@
 
 
             <!-- Table Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
+            <div class="container-fluid pt-5 px-4">
+                <h1>Products</h1>
+                <a href="/admin/add-product"><button class="btn btn-outline-success">Add Product</button></a>
+                <div class="row pt-4 g-4">
                     <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Responsive Table</h6>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
+                            <table class="table" id="categorytable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Stock</th>
+                                        <th scope="col">status</th>
+                                        <th scope="col">description</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Show</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <% data.forEach((value,index)=>{ %>
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">First Name</th>
-                                            <th scope="col">Last Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Country</th>
-                                            <th scope="col">ZIP</th>
-                                            <th scope="col">Status</th>
+                                            <td><%= index+1 %></td>
+                                            <td><%= value.name %></td>
+                                            <td><img src="/product-images/<%= value.image[0] %>" width="120px" height="120px" alt="<%= value.image %>"></td>
+                                            <td><%= value.category %></td>
+                                            <td><%= value.price %></td>
+                                            <td><%= value.stock %></td>
+                                            <td><%= value.status %></td>
+                                            <td><%= value.description %></td>
+                                            <td><a href="/admin/edit-product?id=<%= value._id %>"><button class="btn btn-primary">Edit</button></a></td>
+                                            <% if(value.blocked==false){ %>
+                                                <td><a href="/admin/show-product?id=<%= value._id %>"><button class="btn btn-danger" onclick="return hideconfirm(this)">Hide</button></a></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>John</td>
-                                            <td>Doe</td>
-                                            <td>jhon@email.com</td>
-                                            <td>USA</td>
-                                            <td>123</td>
-                                            <td>Member</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>mark@email.com</td>
-                                            <td>UK</td>
-                                            <td>456</td>
-                                            <td>Member</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>jacob@email.com</td>
-                                            <td>AU</td>
-                                            <td>789</td>
-                                            <td>Member</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+                                            <% }else{ %>
+                                            <td><a href="/admin/show-product?id=<%= value._id %>"><button class="btn btn-success" onclick="return showconfirm(this)">Show</button></a></td>
+                                            </tr>
+                                            <% } %>
+                                    <% })%>
+                                </tbody>
+
+                            </table>
                         </div>
                     </div>
                 </div>
+                <!-- Table End -->
             </div>
-            <!-- Table End -->
+            <!-- Content End -->
+
+
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
-        <!-- Content End -->
 
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/admin/assets/lib/chart/chart.min.js"></script>
-    <script src="/admin/assets/lib/easing/easing.min.js"></script>
-    <script src="/admin/assets/lib/waypoints/waypoints.min.js"></script>
-    <script src="/admin/assets/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="/admin/assets/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="/admin/assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="/admin/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="/admin/javaScript/main.js"></script>
+
+        <!-- JavaScript Libraries -->
+        <script src="/admin/javaScript/main.js"></script>
+    <script>
+        function showconfirm(node) {
+            return confirm("Show this Product?")
+        }
+        function hideconfirm(node) {
+            return confirm("Hide this Product?")
+        }
+    </script>
 </body>
 
 </html>
