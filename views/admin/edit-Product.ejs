@@ -46,15 +46,15 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
                 <a href="/admin/dashboard" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>E-FOOTBALL</h3>
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>HUFIKO</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
-                    <div class="position-relative">
+                    <!-- <div class="position-relative">
                         <img class="rounded-circle" src="/admin/assets/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
+                    </div> -->
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                        <h6 class="mb-0">Rizin</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -98,6 +98,7 @@
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Edit Product</h6>
                             <form action="/admin/edit-product" method="post" enctype="multipart/form-data">
+                                <input type="hidden" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="<%= data._id %>" name="id">
                                 <img src="/product-images/<%= data.image[0] %>" width="100px" height="100px" alt="<%= data.image[0] %>">
                                 <img src="/product-images/<%= data.image[1] %>" width="100px" height="100px" alt="<%= data.image[1] %>">
                                 <div class="row mb-4 mt-2">
@@ -108,8 +109,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="formFile" class="form-label ">Image</label>
-                                        <input class="form-control" type="file" id="formFile" value="<%= data.image %>" name="image"
-                                            style="background: #fff; ">
+                                        <input class="form-control" required type="file" multiple id="formFile" value="<%= data.image[0]%>" name="image" style="background: #fff;">
                                     </div>
                                 </div>
                                 <div class="row mb-4">
@@ -147,10 +147,8 @@
                                 <div class="row mb-4">
                                     <div class="col">
                                         <label for="floatingTextarea mt-3">Description</label>
-                                        <textarea class="form-control mt-3" name="description" placeholder="Discription" id="floatingTextarea"
-                                            style="height: 150px;"></textarea>
-                                            <input type="hidden" class="form-control" id="exampleInputEmail1"
-                                            aria-describedby="emailHelp" value="<%= data._id %>" name="id" required>
+                                        <textarea class="form-control mt-3" name="description" placeholder="Description" id="floatingTextarea"
+                                            style="height: 150px;" required><%= data.description %></textarea>
                                     </div>
                                 </div>
 

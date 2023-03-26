@@ -10,6 +10,9 @@ const accountSid = 'ACac7de309c8689dad97ea9d83861c330a';
 const authToken = 'bbe070e7ae6d7ce19c2a3c41d1125792';
 const client = require('twilio')(accountSid, authToken);
 
+const Product = require('../model/productModel')
+const Category = require('../model/categoryModel')
+
 //bcypt
 const securePassword = async (password) => {
     try {
@@ -59,12 +62,13 @@ const verifyEmail = async (req,res) => {
 }
 
 // Load Home 
-const loadHome = (req, res) => {
+const loadHome = async (req, res) => {
     try {
+        const productData = await Product.find({})
         if (req.session.user) {
-            res.render('user/home', { user: req.session.user })
+            res.render('user/home', { user: req.session.user, data : productData })
         } else {
-            res.render('user/home', { message: "User Logged" })
+            res.render('user/home', { message: "User Logged", data : productData })
         }
     } catch (error) {
         console.log(error.message)
@@ -301,14 +305,35 @@ const addNewPassword = async (req,res) => {
     }
 }
  
-// Lod Shop
-const product = (req, res) => {
+// Product
+const loadProducts = async (req, res) => {
     try {
-        res.render('user/product')
+        const productData = await Product.find({blocked : false})
+        const category = await Category.find({blocked : false})
+        if (req.session.user) {
+            res.render('user/product', { user: req.session.user, data : productData, category : category})
+        } else {
+            res.render('user/product', { message: "User Logged", data : productData, category : category })
+        }
     } catch (error) {
         console.log(error.message)
     }
 }
+
+// Product details
+const viewProduct = (req,res) => {
+    try {
+        
+        if (req.session.user) {
+            res.render('user/product-Details', { user: req.session.user })
+        } else {
+            res.render('user/product-Details', { message: "User Logged" })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 // Cart
 const cart = (req, res) => {
@@ -350,7 +375,7 @@ module.exports = {
     loadHome,
     postLogin,
     about,
-    product,
+    loadProducts,
     cart,
     contact,
     checkout,

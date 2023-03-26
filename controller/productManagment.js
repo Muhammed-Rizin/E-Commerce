@@ -72,17 +72,20 @@ const updateProduct = async (req,res) => {
     try {
         const name = req.body.name
         const price = req.body.price
-        // const image = req.body.image
         const status = req.body.status
         const stock = req.body.stock
         const category = req.body.category
         const description = req.body.description
         const id = req.body.id
+        const image = [];
+        for (i = 0; i < req.files.length; i++) {
+          image[i] = req.files[i].filename;
+        }
 
         await Product.findByIdAndUpdate({_id : id},
             {$set : 
             {name : name, price : price, status: status, stock : stock,
-            categoty : category, description : description}})
+            categoty : category, description : description, image : image}})
         res.redirect('/admin/products')
 
     } catch (error) {

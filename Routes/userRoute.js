@@ -32,7 +32,7 @@ userRoute.post('/resetpass',userController.addNewPassword)
 userRoute.get('/verify',session.logged,userController.verifyEmail)
 
 // Product
-userRoute.get('/product',userController.product)
+userRoute.get('/product',userController.loadProducts)
 
 // Cart
 

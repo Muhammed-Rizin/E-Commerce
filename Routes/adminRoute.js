@@ -71,7 +71,7 @@ adminRoute.post('/add-product',session.Logged,upload.array("image",2),product.in
 
 // Edit Product 
 adminRoute.get('/edit-product',session.Logged,product.editProduct)
-adminRoute.post('/edit-product',session.Logged,product.updateProduct)
+adminRoute.post('/edit-product',session.Logged,upload.array("image",2),product.updateProduct)
 
 // Unlist Product
 adminRoute.get('/show-product',session.Logged,product.unlistProduct)
