@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>HUFIKO-Admin edit product</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -109,20 +109,16 @@
                                     </div>
                                     <div class="col">
                                         <label for="formFile" class="form-label ">Image</label>
-                                        <input class="form-control" required type="file" multiple id="formFile" value="<%= data.image[0]%>" name="image" style="background: #fff;">
+                                        <input class="form-control" type="file" multiple id="formFile" value="<%= data.image[0]%>" name="image" style="background: #fff;">
                                     </div>
                                 </div>
                                 <div class="row mb-4">
-                                    <div class="col">
+                                    <div class="col-6">
                                         <label for="exampleInputEmail1" class="form-label mt-2">Price</label>
                                         <input type="number" class="form-control" id="exampleInputEmail1"
                                             aria-describedby="emailHelp" value="<%= data.price %>"  name="price" required>
                                     </div>
-                                    <div class="col">
-                                        <label for="exampleInputEmail1" class="form-label mt-2">Status</label>
-                                        <input type="string" class="form-control" id="exampleInputEmail1"
-                                            aria-describedby="emailHelp" value="<%= data.status %>" name="status" required>
-                                    </div>
+                                    
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col">

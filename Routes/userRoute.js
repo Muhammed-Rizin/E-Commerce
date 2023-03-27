@@ -34,6 +34,9 @@ userRoute.get('/verify',session.logged,userController.verifyEmail)
 // Product
 userRoute.get('/product',userController.loadProducts)
 
+// Product view
+userRoute.get('/view-product',userController.viewProduct)
+
 // Cart
 
 userRoute.get('/cart',userController.cart)

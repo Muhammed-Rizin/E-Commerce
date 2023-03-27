@@ -46,14 +46,19 @@ const addCategory = (req,res) => {
 const insertCategory = async (req,res) => {
     try {
         const name = req.body.name
-        const data = new Category({
-            name : name
-        })
-
-        const result = await data.save()
-        if(result){
-            res.redirect('/admin/category')
+        const alredyCategory = await Category.findOne({name : name})
+        if(alredyCategory){
+            res.render('admin/add-Category',{message : "Category Already Created"})
+        }else{
+            const data = new Category({
+                name : name
+            })
+            const result = await data.save()
+            if(result){
+                res.redirect('/admin/category')
+            }
         }
+
 
     } catch (error) {
         console.log(error.message);

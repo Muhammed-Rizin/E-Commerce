@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DASHMIN - Bootstrap Admin Template</title>
+    <title>HUFIKO-Admin add category</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -99,6 +99,11 @@
                             <h6 class="mb-4">Add Category</h6>
                             <form action="/admin/add-category" method="post">
                                 <div class="mb-1">
+                                    <% if(typeof message !=='undefined' ){%>
+                                        <p style="color: red;">
+                                          <%= message %>
+                                        </p>
+                                    <% } %>
                                     <label for="exampleInputEmail1" class="form-label">Category Name</label>
                                     <input type="string" class="form-control" id="exampleInputEmail1"
                                         aria-describedby="emailHelp" name="name" required>

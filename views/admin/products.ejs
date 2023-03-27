@@ -132,7 +132,6 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Stock</th>
-                                        <th scope="col">status</th>
                                         <th scope="col">description</th>
                                         <th scope="col">Edit</th>
                                         <th scope="col">Show</th>
@@ -144,11 +143,10 @@
                                         <tr>
                                             <td><%= index+1 %></td>
                                             <td><%= value.name %></td>
-                                            <td><img src="/product-images/<%= value.image[0] %>" width="120px" height="120px" alt="<%= value.image %>"></td>
+                                            <td><img src="/product-images/<%= value.image[0] %>" width="100%" height="100%" alt="<%= value.image %>"></td>
                                             <td><%= value.category %></td>
                                             <td><%= value.price %></td>
                                             <td><%= value.stock %></td>
-                                            <td><%= value.status %></td>
                                             <td><%= value.description %></td>
                                             <td><a href="/admin/edit-product?id=<%= value._id %>"><button class="btn btn-primary">Edit</button></a></td>
                                             <% if(value.blocked==false){ %>

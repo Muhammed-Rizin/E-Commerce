@@ -25,7 +25,6 @@ const insertProduct = async(req,res) =>{
     try {
         const name = req.body.name
         const price = req.body.price
-        const status = req.body.status
         const stock = req.body.stock
         const category = req.body.category
         const description = req.body.description
@@ -39,7 +38,6 @@ const insertProduct = async(req,res) =>{
             name : name,
             price : price,
             image: image,
-            status : status,
             stock : stock,
             category : category,
             description : description
@@ -59,7 +57,7 @@ const insertProduct = async(req,res) =>{
 // Edit Product
 const editProduct = async (req,res) => {
     try {
-        const category =  await Category.find()
+        const category =  await Category.find({blocked : false})
         const id = req.query.id
         const productData = await Product.findOne({_id : id})
         res.render('admin/edit-Product',{category : category, data : productData})
@@ -72,7 +70,6 @@ const updateProduct = async (req,res) => {
     try {
         const name = req.body.name
         const price = req.body.price
-        const status = req.body.status
         const stock = req.body.stock
         const category = req.body.category
         const description = req.body.description
@@ -82,10 +79,17 @@ const updateProduct = async (req,res) => {
           image[i] = req.files[i].filename;
         }
 
-        await Product.findByIdAndUpdate({_id : id},
-            {$set : 
-            {name : name, price : price, status: status, stock : stock,
-            categoty : category, description : description, image : image}})
+        if(image.length != 0) {
+            await Product.findByIdAndUpdate({_id : id},
+                {$set : 
+                {name : name, price : price, stock : stock,
+                categoty : category, description : description, image : image}})
+        }else{
+            await Product.findByIdAndUpdate({_id : id},
+                {$set : 
+                {name : name, price : price, stock : stock,
+                categoty : category, description : description}})
+        }
         res.redirect('/admin/products')
 
     } catch (error) {

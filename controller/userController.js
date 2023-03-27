@@ -6,8 +6,9 @@ const randomString = require('randomstring')
 let dotenv=require("dotenv")
 dotenv.config()
 
-const accountSid = 'ACac7de309c8689dad97ea9d83861c330a';
-const authToken = 'bbe070e7ae6d7ce19c2a3c41d1125792';
+const accountSid = process.env.accountSid
+const authToken = process.env.authToken
+const services = process.env.services
 const client = require('twilio')(accountSid, authToken);
 
 const Product = require('../model/productModel')
@@ -157,9 +158,8 @@ const postRegister = async (req, res) => {
                     res.render('user/signUp', { message: 'Mobile number already exists' })
                 } else {
                     sendVerifyMail(userName,email)
-
                     const userMObile = '+91' + mobileNumber
-                    await client.verify.v2.services("VAd4b61b656f9d475d3ce0727b6940880c")
+                    await client.verify.v2.services(services)    
                         .verifications
                         .create({
                             to: userMObile,
@@ -179,8 +179,8 @@ const postRegister = async (req, res) => {
 const postOtp = async (req, res) => {
     try {
         const mobileOtp = Number(req.body.mobileOtp)
-
-        const result = await client.verify.v2.services('VAd4b61b656f9d475d3ce0727b6940880c')
+        console.log('mobile');
+        const result = await client.verify.v2.services(services)
             .verificationChecks.create({
                 to: '+91' + req.session.mobile,
                 code: mobileOtp
@@ -321,13 +321,15 @@ const loadProducts = async (req, res) => {
 }
 
 // Product details
-const viewProduct = (req,res) => {
+const viewProduct = async (req,res) => {
     try {
-        
+        const id = req.query.id
+        const data = await Product.findById({_id : id})
+        const relatedProduct = await Product.find({_id : {$ne : id}}).limit(8)
         if (req.session.user) {
-            res.render('user/product-Details', { user: req.session.user })
+            res.render('user/product-Details', { user: req.session.user, data : data, related : relatedProduct })
         } else {
-            res.render('user/product-Details', { message: "User Logged" })
+            res.render('user/product-Details', { message: "User Logged" , data : data, related : relatedProduct})
         }
     } catch (error) {
         console.log(error.message);
@@ -376,6 +378,7 @@ module.exports = {
     postLogin,
     about,
     loadProducts,
+    viewProduct,
     cart,
     contact,
     checkout,
