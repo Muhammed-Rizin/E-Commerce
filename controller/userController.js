@@ -297,7 +297,6 @@ const addNewPassword = async (req,res) => {
 
         const secure = await securePassword(password)
         const userData =  await User.findOneAndUpdate({user_name : userName},{$set : {Password : secure, token : ''}})
-        console.log(userData);
 
         res.redirect('/login')
     } catch (error) {
