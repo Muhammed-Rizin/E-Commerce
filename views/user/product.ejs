@@ -83,9 +83,9 @@
                             <li class="active"><a href="/product">Products</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="/about">About Us</a></li>                                 
                                     <li><a href="/cart">Cart</a></li>
-                                    <li><a href="/checkout">Check Out</a></li>
+                                    <li><a href="/about">Whish List</a></li>                                 
+                                    <li><a href="/orders">Orders</a></li>
                                 </ul>
                             </li>
                             <li><a href="/contact">Contacts</a></li>
@@ -197,7 +197,7 @@
                                 </div>
                                 <div class="product__item__text">
                                     <h6><%= value.name %></h6>
-                                    <a href="/product" class="add-cart">+ Add To Cart</a>
+                                    <a  onclick="addToCart('<%= value._id %>'),popupcart()" class="add-cart">+ Add To Cart</a>
                                     <div class="rating">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
@@ -313,6 +313,28 @@
     <script src="/user/javaScript/mixitup.min.js"></script>
     <script src="/user/javaScript/owl.carousel.min.js"></script>
     <script src="/user/javaScript/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        function addToCart(id) {
+                $.ajax({
+                  url: "/add-to-cart",
+                  method: "post",
+                  encoded: true,
+                  data: {
+                    id: id,
+                  },
+                }).done((data) => {
+                  if (data.success) {
+                    window.location.reload();
+                  }else{
+			        swal("Oops!", "User not found. Please login.", "error")
+		            }
+                });
+              }
+              function popupcart() {
+                swal("Added!", "Item has been added to Cart!", "success");
+            }
+    </script>
 </body>
 
 </html>

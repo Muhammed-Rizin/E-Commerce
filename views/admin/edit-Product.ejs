@@ -60,6 +60,7 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/show-user" class="nav-item nav-link"><i class="fa fa-user me-2"></i>User</a>
                     <a href="/admin/products" class="nav-item nav-link active"><i class="fa fa-laptop me-2"></i>Products</a>
                     <a href="/admin/category" class="nav-item nav-link "><i class="fa fa-th me-2"></i>Category</a>
                 </div>
@@ -123,11 +124,8 @@
                                 <div class="row mb-4">
                                     <div class="col">
                                         <label for="floatingSelect">Stock</label>
-                                        <select class="form-select mt-3" value="<%= data.stock %>" name="stock" id="floatingSelect"
-                                            aria-label="Floating label select example">
-                                            <option selected="" value="in Stock">In Stock</option>
-                                            <option value="out Of stock">Out of stock</option>
-                                        </select>
+                                        <input type="number" class="form-control" id="exampleInputEmail1"
+                                            aria-describedby="emailHelp" value="<%= data.stock %>"  name="stock" required>
                                     </div>
                                     <div class="col">
                                         <label for="floatingSelect">Category</label>

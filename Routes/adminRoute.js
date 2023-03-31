@@ -6,7 +6,7 @@ const adminController = require('../controller/adminController')
 const category = require('../controller/categoryManagment')
 const session = require('../middleware/adminSession')
 const product = require('../controller/productManagment')
-
+const user = require('../controller/user-managment')
 
 
 
@@ -75,5 +75,11 @@ adminRoute.post('/edit-product',session.Logged,upload.array("image",2),product.u
 
 // Unlist Product
 adminRoute.get('/show-product',session.Logged,product.unlistProduct)
+
+// User 
+adminRoute.get('/show-user',session.Logged,user.showUser)
+
+// Block User
+adminRoute.get('/block-user',session.Logged,user.blockUser)
 
 module.exports =adminRoute

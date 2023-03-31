@@ -5,7 +5,15 @@ const logged =(req,res,next) =>{
         next()
     }
 }
+const notLogged = (req,res,next) =>{
+    if(req.session.user){
+        next()
+    }else{
+        res.redirect('/')
+    }
+}
 
 module.exports = {
-    logged
+    logged,
+    notLogged
 }

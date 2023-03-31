@@ -35,14 +35,34 @@ userRoute.get('/verify',session.logged,userController.verifyEmail)
 userRoute.get('/product',userController.loadProducts)
 
 // Product view
-userRoute.get('/view-product',userController.viewProduct)
+userRoute.get('/view-product',session.notLogged,userController.viewProduct)
+
+// Profile
+userRoute.get('/profile',session.notLogged,userController.viewProfile)
+userRoute.post('/update-profile',userController.updateData)
 
 // Cart
+userRoute.get('/cart',session.notLogged,userController.cart)
 
-userRoute.get('/cart',userController.cart)
+// add to cart
+userRoute.post('/add-to-cart',session.notLogged,userController.addToCart)
+
+// change quantity 
+userRoute.post('/change-product-quantity',userController.changeQuantity)
+
+// delete Cart Item
+userRoute.post('/delete-cart-item',userController.deleteCartItem)
 
 // Check Out
-userRoute.get('/checkout',userController.checkout)
+userRoute.get('/checkout',session.notLogged,userController.checkout)
+userRoute.post('/add-address',userController.addAddress)
+
+// Place Order
+userRoute.post('/place-order',userController.placeOrder)
+
+// Order Placed
+userRoute.get('/order-placed',session.notLogged,userController.orderPlaced)
+
 
 // Contact
 userRoute.get('/contact',userController.contact)
@@ -50,6 +70,5 @@ userRoute.get('/contact',userController.contact)
 // About
 userRoute.get('/about',userController.about)
 
-// Profile
 
 module.exports =userRoute

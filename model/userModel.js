@@ -32,7 +32,33 @@ const userSchema = mongoose.Schema({
     token :{
         type: String,
         default:''
+    },
+    blocked :{
+        type: Boolean,
+        default : false
+    },
+    wallet :{
+        type : Number,
+        default : 0
+    },
+    address:[
+        {
+            name:{type:String},
+            address:{type:String},
+            city:{type:String},
+            state:{type:String},
+            postalcode:{type:Number},
+            number:{type:Number},    
+            phone:{type:Number}
+
+        }
+    ],
+
+    token: {
+        type: String,
+        default:''
     }
+    
 })
 
 module.exports = mongoose.model('user',userSchema)

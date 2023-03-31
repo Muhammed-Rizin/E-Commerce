@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 const randomString = require('randomstring')
 let dotenv=require("dotenv")
 dotenv.config()
+const { ObjectId } = require("mongodb")
 
 const accountSid = process.env.accountSid
 const authToken = process.env.authToken
@@ -13,6 +14,9 @@ const client = require('twilio')(accountSid, authToken);
 
 const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
+const Cart = require('../model/cart-model')
+const Order = require('../model/order-model');
+const { now } = require('mongoose');
 
 //bcypt
 const securePassword = async (password) => {
@@ -80,23 +84,26 @@ const postLogin = async (req, res) => {
     try {
         const userName = req.body.name
         const password = req.body.password
-    
         const result = await User.findOne({ user_name: userName })
         if (result) {
-            const pass = await bcrypt.compare(password, result.Password)
-            if (pass) {
-                if (result.mobileVerfied == true) {
-                    if (result.emailVerified == true) {
-                        req.session.user = userName
-                        res.redirect('/')
+            if(result.blocked == false){
+                const pass = await bcrypt.compare(password, result.Password)
+                if (pass) {
+                    if (result.mobileVerfied == true) {
+                        if (result.emailVerified == true) {
+                            req.session.user = userName
+                            res.redirect('/')
+                        } else {
+                            res.render('user/login', { message: "Email Not Verified" })
+                        }
                     } else {
-                        res.render('user/login', { message: "Email Not Verified" })
+                        res.render('user/login', { message: "Mobile Not Verified" })
                     }
                 } else {
-                    res.render('user/login', { message: "Mobile Not Verified" })
+                    res.render('user/login', { message: "Entered Password is Incorrect" })
                 }
-            } else {
-                res.render('user/login', { message: "Entered Password is Incorrect" })
+            }else{
+                res.render('user/login', { message: "You were blocked" })
             }
         } else {
             res.render('user/login', { message: "Entered Name is Incorrect" })
@@ -335,22 +342,257 @@ const viewProduct = async (req,res) => {
     }
 }
 
+// load Profile
+const viewProfile = async(req,res) => {
+    try {
+        const data = await User.findOne({user_name : req.session.user})
+        if (req.session.user) {
+            res.render('user/profile', {data : data})
+        } else {
+            res.render('user/profile', { message: "User Logged" })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// update User data 
+const updateData = async(req,res) => {
+    try {
+        const name = req.body.name
+        const email = req.body.email
+        const mobile = req.body.mobile
+        const id = req.body.id
+    
+        const data = await User.findByIdAndUpdate(id,{user_name : name, email : email, mobile_number : mobile})
+        if(data){
+            res.redirect('/profile')
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Add to Cart 
+const addToCart = async (req,res) => {
+    try {
+        if(req.session.user){
+            const productId = req.body.id
+            const userName = req.session.user
+            const userData = await User.findOne({user_name : userName})
+            const userId = userData._id
+            const productData = await Product.findById(productId)
+            const userCart = await Cart.findOne({user : userId})
+            if(userCart) {
+                const productExist = await userCart.product.findIndex( product => product.productId == productId)
+                if(productExist != -1){
+                    await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
+                }else{
+                    await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
+                }
+            }else{
+                
+                const data = new Cart({
+                    user : userId,
+                    product:[{productId : productId, price : productData.price}]
+                })
+                await data.save()
+                res.json({success:true})
+            }
+        }else{
+            res.json({success : false})
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 // Cart
-const cart = (req, res) => {
+const cart = async (req, res) => {
     try {
-        res.render('user/cart')
+        const userData = await User.findOne({user_name : req.session.user})
+        const id = userData._id
+        const cartData = await Cart.findOne({user : id}).populate("product.productId")
+        if (req.session.user) {
+            if(cartData){
+                let Total;
+                if(cartData.product != 0){
+                    const total = await Cart.aggregate([
+                        {
+                            $match :{user : new ObjectId(id)}
+                        },
+                        {
+                            $unwind : '$product'
+                        },
+                        {
+                            $project :{
+                                price :  '$product.price',
+                                quantity : '$product.quantity'
+                            }
+                        },
+                        {
+                            $group :{
+                                _id : null,
+                                total : {
+                                    $sum : {
+                                        $multiply : ["$quantity","$price"]
+                                    }
+                                }
+                            }
+                        }
+                    ]).exec()
+                    Total = total[0].total
+
+     
+                    res.render('user/cart', {user : req.session.user, data : cartData.product, userId : id, total : Total})
+                }else{
+                    res.render('user/cart', {user : req.session.user, data2 : 'hi'})
+                }
+            }else {
+                res.render('user/cart', {user : req.session.user, data2 : 'hi'})
+            } 
+        } else {
+            res.render('user/cart', { message: "User Logged" })
+        }
     } catch (error) {
         console.log(error.message)
     }
 }
 
-// Chek out
-const checkout = (req, res) => {
+// Change Quantity
+const changeQuantity = async (req,res) => {
     try {
-        res.render('user/checkout')
+        const userId = req.body.user
+        const productId = req.body.product
+        const count = parseInt(req.body.count)
+        await Cart.updateOne(
+            {user : userId, "product.productId" : productId},
+            {$inc : {"product.$.quantity" : count}
+        })
+        
+        res.json({success : true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Delete item
+const deleteCartItem = async (req,res) => {
+    try {
+        const id = req.body.id;
+
+        await Cart.findOneAndUpdate({"product.productId" : id},{$pull : {product :{productId : id}}})
+        res.json({success : true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Chek out
+const checkout = async(req, res) => {
+    try {
+        if (req.session.user) {
+        const userName = req.session.user
+        const userData = await User.findOne({user_name : userName})  
+        const id = userData._id
+        const cartData = await Cart.findOne({user : id}).populate("product.productId")
+        let Total
+        const total = await Cart.aggregate([
+            {
+                $match :{user : new ObjectId(id)}
+            },
+            {
+                $unwind : '$product'
+            },
+            {
+                $project :{
+                    price :  '$product.price',
+                    quantity : '$product.quantity'
+                }
+            },
+            {
+                $group :{
+                    _id : null,
+                    total : {
+                        $sum : {
+                            $multiply : ["$quantity","$price"]
+                        }
+                    }
+                }
+            }
+        ]).exec()
+        Total = total[0].total
+            res.render('user/checkout', {user : userName, address : userData.address, total : Total, data : cartData.product})
+        } else {
+            res.render('user/checkout', { message: "User Logged" })
+        }
     } catch (error) {
         console.log(error.message)
+    }
+}
+
+// Add new Adress
+const addAddress = async (req,res) =>{
+    try {
+        const user_name = req.session.user
+        const name = req.body.name
+        const address = req.body.Address
+        const city = req.body.city
+        const state = req.body.state
+        const postalcode = req.body.postalcode
+        const number = req.body.number
+
+        const data = await User.findOneAndUpdate(
+            {user_name : user_name},
+            {$push : 
+                {address : 
+                    {name : name, address : address, city : city, state : state,
+                    postalcode : postalcode, number : number
+                    }
+                }
+            }
+        )
+        res.redirect('/checkout')
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Place Order
+const placeOrder = async (req,res) => {
+    const address = req.body.address
+    const payment = req.body.payment
+    const totalAmount = req.body.total
+    const userName = req.session.user
+    const userData = await User.findOne({user_name : userName})
+    const cartData = await Cart.findOne({user : userData._id})
+    const product = cartData.product
+
+    const status = payment === "COD" ? "placed" : "pending"
+    const newOrder = new Order({
+        deliveryDetails :address,
+        user : userData._id,
+        paymentMethod : payment,
+        product : product,
+        totalAmount : totalAmount,
+        Date : new Date(),
+        status : status
+    })
+    await newOrder.save()
+    await Cart.deleteOne({user : userData._id})
+    if (status === "placed") {
+        res.json({ codSuccess: true });
+    }
+}
+
+// Order Placed
+const orderPlaced = (req,res) => {
+    try {
+        res.render('user/order-completed')
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -390,5 +632,13 @@ module.exports = {
     forget,
     resetPassword,
     newPassword,
-    addNewPassword
+    addNewPassword,
+    viewProfile,
+    updateData,
+    addToCart,
+    changeQuantity,
+    deleteCartItem,
+    addAddress,
+    placeOrder,
+    orderPlaced
 }
