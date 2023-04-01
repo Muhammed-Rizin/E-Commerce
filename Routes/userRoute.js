@@ -66,6 +66,15 @@ userRoute.get('/order-placed',session.notLogged,userController.orderPlaced)
 // order list
 userRoute.get('/orders',session.notLogged,userController.orderPlaced)
 
+// View Order
+userRoute.get('/view-order',session.notLogged,userController.viewOrder)
+
+// Return COD Order
+userRoute.get('/return-order',session.notLogged,userController.returnOrder)
+
+// Cancel COD Order
+userRoute.get('/cancel-order',session.notLogged,userController.cancelOrder)
+
 // Contact
 userRoute.get('/contact',userController.contact)
 

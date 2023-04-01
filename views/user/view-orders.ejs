@@ -127,41 +127,22 @@
     <section class="contact spad">
         <div class="container">
             <div class="row">
-                <table class="table" id="categorytable">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Total Amount</th>
-                            <th scope="col">Method</th>
-                            <th scope="col">status</th>
-                            <th scope="col">View</th>
-                            <th scope="col">Option</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <% data.forEach((value,index) => {%>
-                            <tr>
-                            <td><%= index+1 %></td>
-                            <td><%= value.Date.toISOString().substring(0,10) %></td>
-                            <td>$ <%= value.totalAmount %></td>
-                            <td><%= value.paymentMethod %></td>
-                            <td><%= value.status %></td>
-                            <td><a href="/view-order?id=<%= value._id %>"><button type="button" class="btn btn-secondary m-2">view</button></a></td> 
-
-                            <% if(value.status == 'delivered'){%>
-                                <td><a href="/return-order?id=<%= value._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button></a></td>  
-                            <%}else if(value.status == 'returned'){ %>
-                            <%}else if(value.status == 'cancelled'){ %>
-                            <%}else{ %>
-                                    <td><a href="/cancel-order?id=<%= value._id %>"><button type="button" class="btn btn-danger m-2" onclick="return cancelConforme(this)">Cancel</button></a></td>         
-                            <% } %>
-                            </tr>
-                        <%}) %>     
-                    </tbody>
-
-                </table>
+                <% data.forEach((value,index) => { %>
+                <div class="col-sm-12 col-xl-4 mb-4">
+                    <div class="bg-light rounded h-100 p-4">
+                        <h6 class="mb-4">Product <%= index+1 %></h6>
+                       
+                            <div class="testimonial-item text-center">
+                                <img class="img-fluid rounded-circle mx-auto mb-4" src="/product-images/<%= value.productId.image[0] %>" style="width: 100px; height: 100px;">
+                                <h5 class="mb-1"><%= value.productId.name %></h5>
+                                <p class="mb-0"><b>Quantity :<%= value.quantity %></b></p>
+                                <p class="mb-0"><b>Total Amount :<%= value.productId.price * value.quantity %></b></p>
+                                <p class="mb-0"> <%= value.productId.description %></p>
+                            </div>
+                        
+                    </div>
+                </div>
+                <% }) %>
             </div>
         </div>
     </section>
@@ -188,14 +169,6 @@
     <script src="/user/styleSheet/mixitup.min.js"></script>
     <script src="/user/styleSheet/owl.carousel.min.js"></script>
     <script src="/user/styleSheet/main.js"></script>
-    <script>
-        function returnConforme(node) {
-            return confirm("Return this Product?")
-        }
-        function cancelConforme(node){
-            return confirm("Cancel this Order ?")
-        }
-    </script>
 </body>
 
 </html>

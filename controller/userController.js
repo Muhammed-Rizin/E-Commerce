@@ -658,10 +658,45 @@ const placeOrder = async (req,res) => {
     }
 }
 
-// Order Placed
-const orderPlaced = (req,res) => {
+// Order Placed & Order History
+const orderPlaced = async (req,res) => {
     try {
-        res.render('user/order-history', {user : req.session.user})
+        const data = await Order.find()
+        res.render('user/order-history', {user : req.session.user ,data :data})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// view Order
+const viewOrder = async (req,res) => {
+    try {
+        const orderId = req.query.id
+        const orderData = await Order.findById(orderId).populate("product.productId")
+        res.render('user/view-orders',{user : req.session.user, data : orderData.product})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Return COD Order
+const returnOrder = async (req,res) => {
+    try {
+        const orderId = req.query.id
+        await Order.findByIdAndUpdate(orderId,{$set : {status : 'returned'}})
+        res.redirect('/orders')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// Cancel COD Order
+const cancelOrder = async (req,res) => {
+    try {
+        const orderId = req.query.id
+        await Order.findByIdAndUpdate(orderId,{$set : {status : 'cancelled'}})
+        res.redirect('/orders')
     } catch (error) {
         console.log(error.message);
     }
@@ -712,5 +747,8 @@ module.exports = {
     deleteCartItem,
     addAddress,
     placeOrder,
-    orderPlaced
+    orderPlaced,
+    viewOrder,
+    returnOrder,
+    cancelOrder
 }
