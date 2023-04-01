@@ -63,6 +63,8 @@ userRoute.post('/place-order',userController.placeOrder)
 // Order Placed
 userRoute.get('/order-placed',session.notLogged,userController.orderPlaced)
 
+// order list
+userRoute.get('/orders',session.notLogged,userController.orderPlaced)
 
 // Contact
 userRoute.get('/contact',userController.contact)

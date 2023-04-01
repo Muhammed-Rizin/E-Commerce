@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
         required: true,
     },
     user: {
-        type: String,
+        type: ObjectId,
     },
     paymentMethod: {
         type: String,

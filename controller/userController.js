@@ -383,24 +383,40 @@ const addToCart = async (req,res) => {
             const userId = userData._id
             const productData = await Product.findById(productId)
             const userCart = await Cart.findOne({user : userId})
+
             if(userCart) {
                 const productExist = await userCart.product.findIndex( product => product.productId == productId)
+                
                 if(productExist != -1){
-                    await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
+                    const cartData = await Cart.findOne(
+                        {user : userId, "product.productId" : productId},
+                        {"product.productId.$" : 1 , "product.quantity" : 1})
+    
+                    const [{quantity : quantity}] = cartData.product
+
+                    if(productData.stock <= quantity ){
+                        res.json({outofstock:true})
+                    }else {
+                        await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
+                    }
                 }else{
                     await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
                 }
-            }else{
                 
-                const data = new Cart({
-                    user : userId,
-                    product:[{productId : productId, price : productData.price}]
-                })
-                await data.save()
-                res.json({success:true})
+            }else{
+                if(productData.stock <= 0){
+                    res.json({outofstock:true})
+                }else{
+                    const data = new Cart({
+                        user : userId,
+                        product:[{productId : productId, price : productData.price}]
+                    })
+                    await data.save()
+                    res.json({success:true})
+                }
             }
         }else{
-            res.json({success : false})
+            res.json({login : true})
         }
     } catch (error) {
         console.log(error.message);
@@ -461,20 +477,66 @@ const cart = async (req, res) => {
 }
 
 // Change Quantity
-const changeQuantity = async (req,res) => {
+const changeQuantity = async (req,res,next) => {
     try {
         const userId = req.body.user
         const productId = req.body.product
         const count = parseInt(req.body.count)
-        await Cart.updateOne(
-            {user : userId, "product.productId" : productId},
-            {$inc : {"product.$.quantity" : count}
-        })
-        
-        res.json({success : true})
+        const cartData = await Cart.findOne({user : userId, "product.productId" : productId},
+                                            {"product.productId.$" : 1 , "product.quantity" : 1})
+
+        const [{quantity : quantity}] = cartData.product
+
+        const stockAvailable = await Product.findById(productId)
+
+
+        // Quantity doesn't increse when stock not available 
+        if(stockAvailable.stock < quantity + count){
+            res.json({success:false})
+        }else {
+            await Cart.updateOne(
+                {user : userId, "product.productId" : productId},
+                {$inc : {"product.$.quantity" : count}
+            })
+            res.json({success : true})
+        }
+
     } catch (error) {
         console.log(error.message);
     }
+}
+
+const totalProductPrice = async (req,res) => {
+    const userId = req.body.user
+    const users = await User.findOne({_id : userId})
+
+    let total = await Cart.aggregate([
+        {
+            $match : {user : new ObjectId(userId)}
+        },
+        {
+            $unwind : '$product'
+        },
+        {
+            $project :{
+                price :  '$product.price',
+                quantity : '$product.quantity'
+            }
+        },
+        {
+            $group :{
+                _id : null,
+                total : {
+                    $sum : {
+                        $multiply : ["$quantity","$price"]
+                    }
+                }
+            }
+        }
+    ])
+    let Total = total[0].total
+    console.log(Total);
+    res.json({success : true, Total})
 }
 
 // Delete item
@@ -582,6 +644,15 @@ const placeOrder = async (req,res) => {
     })
     await newOrder.save()
     await Cart.deleteOne({user : userData._id})
+
+    
+    for(i=0;i < product.length; i++){
+        // const [{productId : productId, quantity : quantity}] = product
+        const productId = product[i].productId
+        const quantity = product[i].quantity
+        const prodelete = await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
+    }
+
     if (status === "placed") {
         res.json({ codSuccess: true });
     }
@@ -590,7 +661,7 @@ const placeOrder = async (req,res) => {
 // Order Placed
 const orderPlaced = (req,res) => {
     try {
-        res.render('user/order-completed')
+        res.render('user/order-history', {user : req.session.user})
     } catch (error) {
         console.log(error.message);
     }
@@ -637,6 +708,7 @@ module.exports = {
     updateData,
     addToCart,
     changeQuantity,
+    totalProductPrice,
     deleteCartItem,
     addAddress,
     placeOrder,

@@ -45,8 +45,13 @@
           });
         }
       </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
       <script>
         function changeqnty(userid,proid,count){
+            const quantity = parseInt(document.getElementById(proid).innerHTML)
+            count = parseInt(count)
+
+
             $.ajax({
               url:'/change-product-quantity',
               data:{
@@ -57,26 +62,32 @@
               method:'post',
               encoded:true,
             })
-            // success :(response) => {
+            // success :(response => {
             //     if(response.success == true){
-            //         window.location.reload
+            //         document.getElementById(proid).innerHTML = quantity + count
+            //         document.getElementById("total").innerHTML = 1
+            //         document.getElementById("total2").innerHTML = 1
+            //     }else{
+            //         cdocument.getElementById(proid).innerHTML = quantity + 5
             //     }
-            // }
+            // })
             .done((data)=>{
               console.log(data);
                 if (data.success) {
-                    location.reload();
-            }
+                    window.location.reload();
+                }else{
+                    swal("Oops!", "No More Stock Available", "error")
+                }
           });
           
-          }                      
+          }                     
     </script>
 </head>
 
 <body>
-    <div id="preloder">
+    <!-- <div id="preloder">
         <div class="loader"></div>
-    </div>
+    </div> -->
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
@@ -221,7 +232,7 @@
                                                 <div class="quantity">
                                                     <div class="number">
                                                          <a onclick="changeqnty('<%= userId %>','<%= value.productId._id %>',-1)">-</a>
-                                                        <%= value.quantity %>
+                                                        <span id="<%= value.productId._id %>"><%= value.quantity %></span>
 
                                                         <a 
                                                         onclick="changeqnty('<%= userId %>','<%= value.productId._id %>',1)" 
@@ -248,8 +259,8 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span>$ <%= total %></span></li>
-                            <li>Total <span>$ <%= total %></span></li>
+                            <li>Subtotal <span>$ <span id="total"><%= total %></span></span></li>
+                            <li>Total <span>$ <span id="total2"><%= total %></span></span></li>
                         </ul>
                         <a href="/checkout" class="primary-btn">Proceed to checkout</a>
                         <%} else { %>

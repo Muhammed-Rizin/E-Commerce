@@ -396,9 +396,11 @@
                 }).done((data) => {
                   if (data.success) {
                     window.location.reload();
-                  }else{
-			            swal("Oops!", "User not found. Please login.", "error")
-		                }
+                  }else if(data.outofstock){
+			        swal("Oops!", "Out of stock", "error")
+		          }else{
+                    swal("Oops!", "User not found. Please login.", "error")
+                  }
                 });
               }
 
