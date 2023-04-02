@@ -24,37 +24,42 @@ const securePassword = async (password) => {
         const passwordHash = await bcrypt.hash(password, 10)
         return passwordHash;
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
 // Verify Email
 const sendVerifyMail = async (name,email)=>{
-    const transporter = nodemailer.createTransport({
-        host:'smtp.gmail.com',
-        post: 587,
-        secure: false,
-        requireTLS:true,
-        auth:{
-            user: process.env.email,
-            pass: process.env.code
+    try {
+        const transporter = nodemailer.createTransport({
+            host:'smtp.gmail.com',
+            post: 587,
+            secure: false,
+            requireTLS:true,
+            auth:{
+                user: process.env.email,
+                pass: process.env.code
+            }
+        })
+    
+        const mailOption = {
+            from: process.env.email,
+            to: email,
+            subject: 'For Email Verification',
+            html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/verify?name='+name+'"> Verify <a> your mail </p>'
         }
-    })
-
-    const mailOption = {
-        from: process.env.email,
-        to: email,
-        subject: 'For Email Verification',
-        html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/verify?name='+name+'"> Verify <a> your mail </p>'
+    
+        transporter.sendMail(mailOption,(error,info)=>{
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Email Has Been Sent :",info.response);
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
     }
-
-    transporter.sendMail(mailOption,(error,info)=>{
-        if(error){
-            console.log(error);
-        }else{
-            console.log("Email Has Been Sent :",info.response);
-        }
-    })
 }
 
 const verifyEmail = async (req,res) => {
@@ -62,7 +67,8 @@ const verifyEmail = async (req,res) => {
         const updateData = await User.updateOne({user_name: req.query.name},{$set:{emailVerified :true }})
         res.render('user/verifyEmail')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -77,6 +83,7 @@ const loadHome = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -110,6 +117,7 @@ const postLogin = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -119,6 +127,7 @@ const logIn = (req, res) => {
         res.render('user/login')
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -129,6 +138,7 @@ const logOut = (req, res) => {
         res.redirect('/')
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -138,6 +148,7 @@ const register = (req, res) => {
         res.render('user/signUp')
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 const postRegister = async (req, res) => {
@@ -178,7 +189,8 @@ const postRegister = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -213,7 +225,8 @@ const postOtp = async (req, res) => {
             res.render('user/varification', { message: "Incorrect OTP" })
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -224,7 +237,8 @@ const forget =  (req,res) => {
     try {
         res.render('user/forgetPassword')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -246,7 +260,8 @@ const resetPassword = async (req,res) => {
             res.render('user/forgetPassword',{message : 'Entered Email is Incorrect'})
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -279,7 +294,7 @@ const sendResetPasswordMail = async (name,email,token)=>{
             }
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }
 
@@ -293,7 +308,8 @@ const newPassword = async(req,res) => {
             res.render('404',{message : 'Invlaid Token'})
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -307,7 +323,8 @@ const addNewPassword = async (req,res) => {
 
         res.redirect('/login')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
  
@@ -323,6 +340,7 @@ const loadProducts = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -338,7 +356,8 @@ const viewProduct = async (req,res) => {
             res.render('user/product-Details', { message: "User Logged" , data : data, related : relatedProduct})
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -352,7 +371,8 @@ const viewProfile = async(req,res) => {
             res.render('user/profile', { message: "User Logged" })
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -369,7 +389,8 @@ const updateData = async(req,res) => {
             res.redirect('/profile')
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -419,7 +440,8 @@ const addToCart = async (req,res) => {
             res.json({login : true})
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -473,6 +495,7 @@ const cart = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -502,41 +525,47 @@ const changeQuantity = async (req,res,next) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
 const totalProductPrice = async (req,res) => {
-    const userId = req.body.user
-    const users = await User.findOne({_id : userId})
-
-    let total = await Cart.aggregate([
-        {
-            $match : {user : new ObjectId(userId)}
-        },
-        {
-            $unwind : '$product'
-        },
-        {
-            $project :{
-                price :  '$product.price',
-                quantity : '$product.quantity'
-            }
-        },
-        {
-            $group :{
-                _id : null,
-                total : {
-                    $sum : {
-                        $multiply : ["$quantity","$price"]
+    try {
+        const userId = req.body.user
+        const users = await User.findOne({_id : userId})
+    
+        let total = await Cart.aggregate([
+            {
+                $match : {user : new ObjectId(userId)}
+            },
+            {
+                $unwind : '$product'
+            },
+            {
+                $project :{
+                    price :  '$product.price',
+                    quantity : '$product.quantity'
+                }
+            },
+            {
+                $group :{
+                    _id : null,
+                    total : {
+                        $sum : {
+                            $multiply : ["$quantity","$price"]
+                        }
                     }
                 }
             }
-        }
-    ])
-    let Total = total[0].total
-    console.log(Total);
-    res.json({success : true, Total})
+        ])
+        let Total = total[0].total
+        console.log(Total);
+        res.json({success : true, Total})
+    } catch (error) {
+        console.log(error.message);
+        res.render('user/505')
+    }
 }
 
 // Delete item
@@ -547,7 +576,8 @@ const deleteCartItem = async (req,res) => {
         await Cart.findOneAndUpdate({"product.productId" : id},{$pull : {product :{productId : id}}})
         res.json({success : true})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -591,6 +621,8 @@ const checkout = async(req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
+        
     }
 }
 
@@ -618,53 +650,60 @@ const addAddress = async (req,res) =>{
         res.redirect('/checkout')
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
 // Place Order
 const placeOrder = async (req,res) => {
-    const address = req.body.address
-    const payment = req.body.payment
-    const totalAmount = req.body.total
-    const userName = req.session.user
-    const userData = await User.findOne({user_name : userName})
-    const cartData = await Cart.findOne({user : userData._id})
-    const product = cartData.product
-
-    const status = payment === "COD" ? "placed" : "pending"
-    const newOrder = new Order({
-        deliveryDetails :address,
-        user : userData._id,
-        paymentMethod : payment,
-        product : product,
-        totalAmount : totalAmount,
-        Date : new Date(),
-        status : status
-    })
-    await newOrder.save()
-    await Cart.deleteOne({user : userData._id})
-
+    try {
+        const address = req.body.address
+        const payment = req.body.payment
+        const totalAmount = req.body.total
+        const userName = req.session.user
+        const userData = await User.findOne({user_name : userName})
+        const cartData = await Cart.findOne({user : userData._id})
+        const product = cartData.product
     
-    for(i=0;i < product.length; i++){
-        // const [{productId : productId, quantity : quantity}] = product
-        const productId = product[i].productId
-        const quantity = product[i].quantity
-        const prodelete = await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
-    }
-
-    if (status === "placed") {
-        res.json({ codSuccess: true });
+        const status = payment === "COD" ? "Placed" : "Pending"
+        const newOrder = new Order({
+            deliveryDetails :address,
+            user : userData._id,
+            paymentMethod : payment,
+            product : product,
+            totalAmount : totalAmount,
+            Date : new Date(),
+            status : status
+        })
+        await newOrder.save()
+        await Cart.deleteOne({user : userData._id})
+    
+        
+        for(i=0;i < product.length; i++){
+            // const [{productId : productId, quantity : quantity}] = product
+            const productId = product[i].productId
+            const quantity = product[i].quantity
+            const prodelete = await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
+        }
+        if (status === "Placed") {
+            res.json({ codSuccess: true });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.render('user/505')
     }
 }
 
 // Order Placed & Order History
 const orderPlaced = async (req,res) => {
     try {
-        const data = await Order.find()
+        const userData = await User.findOne({user_name : req.session.user})
+        const data = await Order.find({user : userData._id})
         res.render('user/order-history', {user : req.session.user ,data :data})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -676,7 +715,8 @@ const viewOrder = async (req,res) => {
         res.render('user/view-orders',{user : req.session.user, data : orderData.product})
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -687,7 +727,8 @@ const returnOrder = async (req,res) => {
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'returned'}})
         res.redirect('/orders')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -698,7 +739,8 @@ const cancelOrder = async (req,res) => {
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'cancelled'}})
         res.redirect('/orders')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -708,6 +750,7 @@ const contact = (req, res) => {
         res.render('user/contact')
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -717,6 +760,7 @@ const about = (req, res) => {
         res.render('user/about')
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 

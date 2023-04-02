@@ -7,6 +7,7 @@ const category = require('../controller/categoryManagment')
 const session = require('../middleware/adminSession')
 const product = require('../controller/productManagment')
 const user = require('../controller/user-managment')
+const order = require('../controller/order-managment')
 
 
 
@@ -81,5 +82,15 @@ adminRoute.get('/show-user',session.Logged,user.showUser)
 
 // Block User
 adminRoute.get('/block-user',session.Logged,user.blockUser)
+
+// Order 
+adminRoute.get('/show-orders',session.Logged,order.showOrders)
+
+// View Order
+adminRoute.get('/view-order',session.Logged,order.viewOrder)
+
+// Update Order status
+adminRoute.post('/update-status',order.updateStatus)
+
 
 module.exports =adminRoute

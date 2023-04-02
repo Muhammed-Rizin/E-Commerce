@@ -31,5 +31,13 @@ const adminRoute = require('./Routes/adminRoute')
 
 app.use('/',userRoutes)
 app.use('/admin',adminRoute)
+app.use((req,res) => {
+    try {
+        res.status(404).render('user/404')
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505')
+    }
+})
 
 app.listen(3000,()=>console.log("Server Conected"))
