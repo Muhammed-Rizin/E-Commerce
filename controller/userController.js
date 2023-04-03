@@ -655,6 +655,19 @@ const addAddress = async (req,res) =>{
     }
 }
 
+// Delete Address 
+const deleteAddress = async (req,res) => {
+    try {
+        const addressId = req.query.id
+        const deleted = await User.findOneAndUpdate({"address._id": addressId},{$pull : {address :{_id: addressId} }})
+        res.redirect('/checkout')
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
+    }
+
+}
+
 // Place Order
 const placeOrder = async (req,res) => {
     try {
@@ -790,6 +803,7 @@ module.exports = {
     totalProductPrice,
     deleteCartItem,
     addAddress,
+    deleteAddress,
     placeOrder,
     orderPlaced,
     viewOrder,

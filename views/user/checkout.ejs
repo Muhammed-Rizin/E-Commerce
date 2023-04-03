@@ -239,15 +239,25 @@
                         <div class="col-lg-8 col-md-6">
                             <% address.forEach((value)=>{ %>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" name="address" type="radio" 
-                                    value=" <%= value.name%>,<%= value.address %> <%= value.postalcode %>"
-                                     id="flexCheckDefault" required>
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                     <%= value.name%>,<br>
-                                     <%= value.address %> <br>
-                                     <%= value.postalcode %>, 
-                                     <%= value.number %>
-                                    </label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input class="form-check-input" name="address" type="radio" 
+                                            value=" <%= value.name%>,<%= value.address %> <%= value.postalcode %>"
+                                             id="flexCheckDefault" required>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                             <%= value.name%>,<br>
+                                             <%= value.address %> <br>
+                                             <%= value.postalcode %>, 
+                                             <%= value.number %>
+                                            </label>
+                                        </div>
+                                        <div class="col-2">
+                                            <button disabled class="site-btn" >
+                                                <a href="/delete-address?id=<%=value._id%>"> Delete </a>
+
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>                       
                             <%}) %>
                         </div>

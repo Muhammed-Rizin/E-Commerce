@@ -55,7 +55,12 @@ userRoute.post('/delete-cart-item',userController.deleteCartItem)
 
 // Check Out
 userRoute.get('/checkout',session.notLogged,userController.checkout)
+
+// Add Adress
 userRoute.post('/add-address',userController.addAddress)
+
+// Delete Address
+userRoute.get('/delete-address',session.notLogged,userController.deleteAddress)
 
 // Place Order
 userRoute.post('/place-order',userController.placeOrder)

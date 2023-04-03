@@ -24,6 +24,27 @@
     <link rel="stylesheet" href="/user/styleSheet/style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+        .img_producto_container {
+  width: 550px;
+  height: 550px;
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.img_producto {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: transform 0.5s ease-out;
+}
+
+    </style>
 </head>
 
 <body>
@@ -151,7 +172,7 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" >
+                                    <div class="product__thumb__pic ">
                                         <img src="/product-images/<%= data.image[0]%>" alt="">
                                     </div>
                                 </a>
@@ -168,13 +189,13 @@
                     <div class="col-lg-6 col-md-9">
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="/product-images/<%= data.image[0]%>" alt="">
+                                <div class="product__details__pic__item img_producto_container" data-scale="0.5">
+                                    <img src="/product-images/<%= data.image[0]%>" class="dslc-lightbox-image img_producto">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-2" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    <img src="/product-images/<%= data.image[1]%>" alt="">
+                                <div class="product__details__pic__item img_producto_container" data-scale="0.5">
+                                    <img src="/product-images/<%= data.image[1]%>"  class="dslc-lightbox-image img_producto"  alt="">
                                 </div>
                             </div>
                         </div>
@@ -400,6 +421,32 @@
               function popupcart() {
                 swal("Added!", "Item has been added to Cart!", "success");
             }
+    </script>
+    <script>
+        $(".img_producto_container")
+  // tile mouse actions
+  .on("mouseover", function() {
+    $(this)
+      .children(".img_producto")
+      .css({ transform: "scale(" + $(this).attr("data-scale") + ")" });
+  })
+  .on("mouseout", function() {
+    $(this)
+      .children(".img_producto")
+      .css({ transform: "scale(1)" });
+  })
+  .on("mousemove", function(e) {
+    $(this)
+      .children(".img_producto")
+      .css({
+        "transform-origin":
+          ((e.pageX - $(this).offset().left) / $(this).width()) * 100 +
+          "% " +
+          ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +
+          "%"
+      });
+  });
+
     </script>
 </body>
 

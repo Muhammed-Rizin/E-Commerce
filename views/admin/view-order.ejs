@@ -167,33 +167,35 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="row">
-                                            <div class="col-2 mt-3">
-                                                <h6>Status :</h6>
-                                            </div>
-                                            <div class="col-6">
-                                                <form action="/admin/update-status" method="post">
-                                                <input type="hidden" name="orderId" value="<%= orderData._id %>">
-                                                    <input type="hidden" name="productId" value="">
-                                                    <select class="form-select mt-2" name="status" id="floatingSelect"
-                                                    aria-label="Floating label select example" style="background: transparent; border: none; size: 10px;">
-                                                    <option selected disabled value=""><%= orderData.status %></option>
-                                                    
-                                                            <option>Shipped</option>
-                                                            <option>Placed</option>
-                                                            <option>Delivered</option>
-                                                           
-                                                    </select>
-                                                    
+                                            <% if(orderData.status == "returned" || orderData.status == "cancelled" || orderData.status == "Delivered"){%>
+                                                <h6>Status : <%= orderData.status %></h6>
+                                            <%} else { %>
+                                                <div class="col-2 mt-3">
+                                                    <h6>Status :</h6>
+                                                </div>
+                                                <div class="col-6">
+                                                    <form action="/admin/update-status" method="post">
+                                                    <input type="hidden" name="orderId" value="<%= orderData._id %>">
+                                                        <input type="hidden" name="productId" value="">
+                                                        <select class="form-select mt-2" name="status" id="floatingSelect"
+                                                        aria-label="Floating label select example" style="background: transparent; border: none; size: 10px;">
+                                                        <option selected disabled value=""><%= orderData.status %></option>
+                                                        
+                                                                <option>Shipped</option>
+                                                                <option>Placed</option>
+                                                                <option>Delivered</option>
+                                                               
+                                                        </select>   
                                                 </div>
                                                 <div class="col-4"> 
                                                     <button type="submit" class="btn btn-success m-2 ">Update</button>
                                                 </div>
-                                            </form>
+                                                </form>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -222,7 +224,7 @@
                                         <td><%=orderData.Date.toISOString().substring(0,10)%></td>
                                         <td><%= value.productId.name %></td>
                                         <td><img src="/product-images/<%= value.productId.image[0] %>" style="width: 100px;" alt=""></td>
-                                        <td><%= value.productId.price %></td>
+                                        <td><%= value.productId.price * value.quantity %></td>
                                         <td><%= value.quantity %></td>
                                         
                                         
