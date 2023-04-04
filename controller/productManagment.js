@@ -9,6 +9,7 @@ const productList = async (req,res) => {
         res.render('admin/products',{data : data})
     } catch (error) {
         console.log(error.message);
+        res.render('user/505');
     }
 }
 
@@ -18,6 +19,7 @@ const addProduct = async (req,res) => {
         res.render('admin/add-Products',{data : category })
     } catch (error) {
         console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -50,6 +52,7 @@ const insertProduct = async(req,res) =>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('user/505');
     }
 }
 
@@ -63,6 +66,7 @@ const editProduct = async (req,res) => {
         res.render('admin/edit-Product',{category : category, data : productData})
     } catch (error) {
         console.log(error.message);
+        res.render('user/505');
     }
 }
 
@@ -94,6 +98,7 @@ const updateProduct = async (req,res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('user/505');
     }
 }
 
@@ -111,6 +116,29 @@ const unlistProduct = async (req,res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('user/505');
+    }
+}
+
+// Remove Single image
+const deleteSingle = async (req,res) => {
+    try {
+        const position = req.query.delete
+        const id = req.query.id
+        const productImage = await Product.findById(id)
+        const image = productImage.image[position]
+        const data  = await Product.updateOne(
+            {_id : id},
+            {$pullAll : {
+            image : [image]
+            }
+        })
+        console.log(data);
+
+        res.redirect('/admin/products')
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -120,5 +148,6 @@ module.exports = {
     insertProduct,
     editProduct,
     updateProduct,
-    unlistProduct
+    unlistProduct,
+    deleteSingle
 }

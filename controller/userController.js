@@ -407,13 +407,14 @@ const addToCart = async (req,res) => {
 
             if(userCart) {
                 const productExist = await userCart.product.findIndex( product => product.productId == productId)
-                
                 if(productExist != -1){
+
                     const cartData = await Cart.findOne(
                         {user : userId, "product.productId" : productId},
                         {"product.productId.$" : 1 , "product.quantity" : 1})
     
                     const [{quantity : quantity}] = cartData.product
+
 
                     if(productData.stock <= quantity ){
                         res.json({outofstock:true})
@@ -421,7 +422,13 @@ const addToCart = async (req,res) => {
                         await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
                     }
                 }else{
-                    await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
+                    const cartData = await Cart.findOne({user : userId})
+                    const [{quantity : quantity}] = cartData.product
+                    if(productData.stock <= quantity ){
+                        res.json({outofstock:true})
+                    }else {
+                        await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
+                    }
                 }
                 
             }else{
@@ -515,13 +522,13 @@ const changeQuantity = async (req,res,next) => {
 
         // Quantity doesn't increse when stock not available 
         if(stockAvailable.stock < quantity + count){
-            res.json({success:false})
+            res.json({changeSuccess:false})
         }else {
             await Cart.updateOne(
                 {user : userId, "product.productId" : productId},
                 {$inc : {"product.$.quantity" : count}
             })
-            res.json({success : true})
+            res.json({changeSuccess : true})
         }
 
     } catch (error) {

@@ -37,10 +37,7 @@
           }).done((data) => {
             console.log(data);
             if (data.success) {
-               setTimeout(function() {
-                    location.reload();
-                  }, 1000);
-              
+                location.reload();
             }
           });
         }
@@ -51,17 +48,32 @@
             const quantity = parseInt(document.getElementById(proid).innerHTML)
             count = parseInt(count)
 
+console.log(quantity);
 
-            $.ajax({
-              url:'/change-product-quantity',
-              data:{
-                user:userid,
-                product:proid,
-                count:count
-              },
-              method:'post',
-              encoded:true,
-            })
+            if(count == -1 && quantity == 1 || count == -2){
+                deleteitem(proid)
+            }else{
+                $.ajax({
+                    url:'/change-product-quantity',
+                    data:{
+                        user:userid,
+                        product:proid,
+                        count:count
+                    },
+                    method:'post',
+                    encoded:true,
+                }).done((data) => {
+                    if(data.changeSuccess){
+                        document.getElementById(proid).innerText == quantity +count
+                        location.reload()
+                    }else {
+                        swal("Oops!", "No More Stock Available", "error")
+                    }
+                })
+
+            }
+
+            
             // success :(response => {
             //     if(response.success == true){
             //         document.getElementById(proid).innerHTML = quantity + count
@@ -71,14 +83,15 @@
             //         cdocument.getElementById(proid).innerHTML = quantity + 5
             //     }
             // })
-            .done((data)=>{
-              console.log(data);
-                if (data.success) {
-                    window.location.reload();
-                }else{
-                    swal("Oops!", "No More Stock Available", "error")
-                }
-          });
+        //     .done((data)=>{
+        //       console.log(data);
+        //         if (data.success) {
+        //             window.location.reload();
+        //             console.log('count incresed');
+        //         }else{
+        //             swal("Oops!", "No More Stock Available", "error")
+        //         }
+        //   });
           
           }                     
     </script>

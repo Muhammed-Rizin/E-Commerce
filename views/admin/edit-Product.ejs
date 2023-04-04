@@ -102,8 +102,10 @@
                             <h6 class="mb-4">Edit Product</h6>
                             <form action="/admin/edit-product" method="post" enctype="multipart/form-data">
                                 <input type="hidden" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="<%= data._id %>" name="id">
-                                <img src="/product-images/<%= data.image[0] %>" width="100px" height="100px" alt="<%= data.image[0] %>">
-                                <img src="/product-images/<%= data.image[1] %>" width="100px" height="100px" alt="<%= data.image[1] %>">
+                                <% data.image.forEach((value,index) => {%>
+                                    <a href="/admin/delete-image?delete=<%= index %>&id=<%= data._id %>"><img src="/product-images/<%= data.image[index] %>" width="100px" height="100px" alt="<%= data.image[index] %>"></a>
+                                <%}) %>
+                                <!-- <img src="/product-images/<%= data.image[1] %>" width="100px" height="100px" alt="<%= data.image[1] %>"> -->
                                 <div class="row mb-4 mt-2">
                                     <div class="col">
                                         <label for="exampleInputEmail1" class="form-label">Product Name</label>
