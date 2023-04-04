@@ -1,6 +1,8 @@
 const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
 
+const { ObjectId } = require("mongodb")
+
 
 // Products
 const productList = async (req,res) => {
@@ -123,9 +125,11 @@ const unlistProduct = async (req,res) => {
 // Remove Single image
 const deleteSingle = async (req,res) => {
     try {
-        const position = req.query.delete
-        const id = req.query.id
+        const position = req.body.position
+        console.log(position,typeof req.body.id);
+        const id = new ObjectId(req.body.id) 
         const productImage = await Product.findById(id)
+        console.log(productImage);
         const image = productImage.image[position]
         const data  = await Product.updateOne(
             {_id : id},
@@ -133,6 +137,10 @@ const deleteSingle = async (req,res) => {
             image : [image]
             }
         })
+
+        if(data) {
+            res.json({success : true})
+        }
         console.log(data);
 
         res.redirect('/admin/products')

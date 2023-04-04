@@ -92,6 +92,6 @@ adminRoute.get('/view-order',session.Logged,order.viewOrder)
 // Update Order status
 adminRoute.post('/update-status',order.updateStatus)
 
-adminRoute.get('/delete-image',session.Logged,product.deleteSingle)
+adminRoute.post('/delete-image',session.Logged,product.deleteSingle)
 
 module.exports =adminRoute
