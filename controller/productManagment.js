@@ -126,10 +126,9 @@ const unlistProduct = async (req,res) => {
 const deleteSingle = async (req,res) => {
     try {
         const position = req.body.position
-        console.log(position,typeof req.body.id);
         const id = new ObjectId(req.body.id) 
         const productImage = await Product.findById(id)
-        console.log(productImage);
+        
         const image = productImage.image[position]
         const data  = await Product.updateOne(
             {_id : id},
@@ -141,8 +140,6 @@ const deleteSingle = async (req,res) => {
         if(data) {
             res.json({success : true})
         }
-        console.log(data);
-
         res.redirect('/admin/products')
     } catch (error) {
         console.log(error.message)

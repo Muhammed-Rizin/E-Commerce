@@ -16,7 +16,9 @@ const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
 const Cart = require('../model/cart-model')
 const Order = require('../model/order-model');
+const WishList = require('../model/wishlist-model')
 const { now } = require('mongoose');
+const { response } = require('../Routes/userRoute');
 
 //bcypt
 const securePassword = async (password) => {
@@ -415,16 +417,14 @@ const addToCart = async (req,res) => {
     
                     const [{quantity : quantity}] = cartData.product
 
-
                     if(productData.stock <= quantity ){
                         res.json({outofstock:true})
                     }else {
                         await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
                     }
                 }else{
-                    const cartData = await Cart.findOne({user : userId})
-                    const [{quantity : quantity}] = cartData.product
-                    if(productData.stock <= quantity ){
+                    
+                    if(productData.stock <= 0 ){
                         res.json({outofstock:true})
                     }else {
                         await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
@@ -764,6 +764,84 @@ const cancelOrder = async (req,res) => {
     }
 }
 
+// Wishlist 
+const wishList = async (req,res) => {
+    try {
+        const user = req.session.user
+        const userData = await User.findOne({user_name : user})
+        const data = await WishList.findOne({user : userData._id}).populate("product.productId")
+
+        if(data){
+            if(data.product != 0){
+                res.render('user/wishlist' , {user : user , data : data.product})
+            }else {
+                res.render('user/wishlist' , {user : user , data2 :'hi'})
+            }
+        }else {
+            res.render('user/wishlist' , {user : user , data2 :'hi'})
+
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.render('user/505');
+    }
+}
+
+// Add to wishlist
+const addToWishlist = async (req,res) => {
+    try {
+        const productId = req.body.id
+        const userName = req.session.user
+
+        const productData = await Product.findById(productId)
+        const userData = await User.findOne({user_name : userName})
+        const alreadyWishlist = await WishList.findOne({user : new ObjectId(userData._id) })
+        if(alreadyWishlist){
+            const productExist = await alreadyWishlist.product.findIndex( product => product.productId == productId)
+            if(productExist != -1) {
+                res.json({already : true})
+            }else {
+                await WishList.findOneAndUpdate({user : userData._id},{$push : 
+                    {product:
+                        {
+                            productId : productId,
+                            name : productData.name,
+                            price : productData.price
+                        }
+                    }
+                })
+                res.json({success : true})
+            }
+        }else {
+            const data = new WishList({
+                user : userData._id,
+                product : [{
+                    productId : productId,
+                    name : productData.name,
+                    price : productData.price
+                }]
+            })
+            await data.save()
+            res.json({success : true})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.render('user/505')
+    }
+}
+
+// Delete From wish list
+const deleteWishItem = async (req,res) => {
+    try {
+        const id = req.body.id
+        await WishList.findOneAndUpdate({"product.productId" : id},{$pull : {product :{productId : id}}})
+        res.json({success : true})
+    } catch (error) {
+        
+    }
+}
+
 // contact
 const contact = (req, res) => {
     try {
@@ -815,5 +893,8 @@ module.exports = {
     orderPlaced,
     viewOrder,
     returnOrder,
-    cancelOrder
+    cancelOrder,
+    wishList,
+    addToWishlist,
+    deleteWishItem
 }

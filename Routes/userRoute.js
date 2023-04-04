@@ -80,6 +80,15 @@ userRoute.get('/return-order',session.notLogged,userController.returnOrder)
 // Cancel COD Order
 userRoute.get('/cancel-order',session.notLogged,userController.cancelOrder)
 
+// Wishlist
+userRoute.get('/wish-list',session.notLogged,userController.wishList)
+
+// Add to wishlist
+userRoute.post('/add-to-wishlist',session.notLogged,userController.addToWishlist)
+
+// Delete from Wish list 
+userRoute.post('/delete-wishlist-item',session.notLogged,userController.deleteWishItem)
+
 // Contact
 userRoute.get('/contact',userController.contact)
 

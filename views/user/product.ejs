@@ -82,9 +82,7 @@
                             <li><a href="/">Home</a></li>
                             <li class="active"><a href="/product">Products</a></li>
                             <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="/cart">Cart</a></li>
-                                    <li><a href="/about">Whish List</a></li>                                 
+                                <ul class="dropdown">                             
                                     <li><a href="/orders">Orders</a></li>
                                 </ul>
                             </li>
@@ -95,9 +93,8 @@
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                         <a href="#" class="search-switch"><img src="/user/assets/img/icon/search.png" alt=""></a>
-                        <a href="#"><img src="/user/assets/img/icon/heart.png" alt=""></a>
-                        <a href="#"><img src="/user/assets/img/icon/cart.png" alt=""> <span>0</span></a>
-                        <div class="price">$0.00</div>
+                        <a href="/wish-list"><img src="/user/assets/img/icon/heart.png" alt=""></a>
+                        <a href="/cart"><img src="/user/assets/img/icon/cart.png" alt=""> </a>
                     </div>
                 </div>
             </div>
@@ -186,13 +183,12 @@
                             <div class="product__item"> 
                                 <div class="product__item__pic set-bg" data-setbg="/product-images/<%= value.image[0] %>"
                                     style="background-image: url('/product-images/<%= value.image[0] %>')">
-                                    <a href="/view-product?id=<%= value._id %>" class="stretched-link"></a>
                                     <ul class="product__hover">
-                                        <li><a href="#"><img src="/user/assets/img/icon/heart.png" alt=""></a></li>
-                                        <li><a href="#"><img src="/user/assets/img/icon/compare.png" alt="">
-                                                <span>Compare</span></a>
+                                        <li><a onclick="addToWishlist('<%= value._id %>')"><img src="/user/assets/img/icon/heart.png" alt="">
+                                            <span>Add to wishlist</span></a></li>
+                                        <li><a href="/view-product?id=<%= value._id %>"><img src="/user/assets/img/icon/eye.png" alt="">
+                                                <span>view</span></a>
                                         </li>
-                                        <li><a href="#"><img src="/user/assets/img/icon/search.png" alt=""></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
@@ -336,6 +332,27 @@
               function popupcart() {
                 swal("Added!", "Item has been added to Cart!", "success");
             }
+            
+
+        function addToWishlist(id){
+            $.ajax({
+                url : '/add-to-wishlist',
+                method : 'post',
+                encoded : true,
+                data : {
+                    id : id
+                }
+            }).done((data) => {
+                if(data.success) {
+                    swal("Added!", "Item has been added to whislist!", "success");
+                }else if(data.already){
+                    swal("Oops!", "Already added", "error")
+                }else {
+                    swal("Oops!", "User not found. Please login.", "error")
+
+                }
+            })
+        }
     </script>
 </body>
 
