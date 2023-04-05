@@ -187,7 +187,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <button class="btn btn-dark">+ Add To Cart</button>
+                                                <button onclick="addToCart('<%= value.productId._id %>') " class="btn btn-dark">+ Add To Cart</button>
                                             </td>
                                             
                                             <td class="cart__close">
@@ -286,6 +286,28 @@
     <script src="/user/javaScript/mixitup.min.js"></script>
     <script src="/user/javaScript/owl.carousel.min.js"></script>
     <script src="/user/javaScript/main.js"></script>
+    <script>
+         function addToCart(id) {
+            console.log(id);
+                $.ajax({
+                  url: "/add-to-cart-wishlist",
+                  method: "post",
+                  encoded: true,
+                  data: {
+                    id: id,
+                  },
+                }).done((data) => {
+                  if (data.success) {
+                    location.reload();
+                  }else if(data.outofstock){
+			        swal("Oops!", "Out of stock", "error")
+		          }else{
+                    swal("Oops!", "User not found. Please login.", "error")
+                  }
+                });
+              }
+            
+    </script>
 </body>
 
 </html>
