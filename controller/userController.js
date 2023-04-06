@@ -6,6 +6,14 @@ const randomString = require('randomstring')
 let dotenv=require("dotenv")
 dotenv.config()
 const { ObjectId } = require("mongodb")
+const Razorpay = require('razorpay')
+
+const secret = process.env.secret
+const keyid = process.env.keyid
+var instance = new Razorpay({
+    key_id: keyid,
+    key_secret: secret,
+  });
 
 const accountSid = process.env.accountSid
 const authToken = process.env.authToken
@@ -699,21 +707,71 @@ const placeOrder = async (req,res) => {
             status : status
         })
         await newOrder.save()
+        const orderId = newOrder._id
+        const total = newOrder.totalAmount
         await Cart.deleteOne({user : userData._id})
     
+        console.log(total);
         
-        for(i=0;i < product.length; i++){
-            // const [{productId : productId, quantity : quantity}] = product
-            const productId = product[i].productId
-            const quantity = product[i].quantity
-            const prodelete = await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
-        }
+        
         if (status === "Placed") {
+            for(i=0;i < product.length; i++){
+                // const [{productId : productId, quantity : quantity}] = product
+                const productId = product[i].productId
+                const quantity = product[i].quantity
+                await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
+            }
             res.json({ codSuccess: true });
+        }else {
+            for(i=0;i < product.length; i++){
+                // const [{productId : productId, quantity : quantity}] = product
+                const productId = product[i].productId
+                const quantity = product[i].quantity
+                await Product.findByIdAndUpdate(productId,{$inc : {stock : -quantity}})
+            }
+            var options = {
+                amount: total * 100,
+                currency: "INR",
+                receipt: "" + orderId
+              };
+              instance.orders.create(options, (err, order) => {
+                console.log(order);
+                res.json({order})
+              });
         }
     } catch (error) {
         console.log(error.message);
         res.render('user/505')
+    }
+}
+
+const verifyPayment = async (req,res) => {
+    try {
+        let userData= await User.findOne({user_name:req.session.user})
+       
+        const details=(req.body);
+        const crypto = require("crypto");
+        let hmac=crypto.createHmac("sha256",secret)
+        hmac.update(details.payment.razorpay_order_id+'|'+details.payment.razorpay_payment_id)
+        hmac=hmac.digest('hex')
+
+        if(hmac==details.payment.razorpay_signature){
+            await Order.findByIdAndUpdate({
+                _id:details.order.receipt
+            },
+            {$set:{paymentId:details.payment.razorpay_payment_id}})
+          
+
+            await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}})
+            await Cart.deleteOne({user:userData._id})
+            res.json({success:true})
+        }else{
+            await Order.deleteOne({ _id:details.order.receipt });
+            res.json({ success: false });
+    
+        }
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -1001,5 +1059,6 @@ module.exports = {
     addToWishlist,
     deleteWishItem,
     addToCartWishlist,
-    applyCoupon
+    applyCoupon,
+    verifyPayment
 }

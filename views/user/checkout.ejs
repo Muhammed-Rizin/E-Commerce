@@ -375,6 +375,7 @@
     <script src="/user/javaScript/owl.carousel.min.js"></script>
     <script src="/user/javaScript/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         $("#place-order").submit((e)=>{
             const amount = document.getElementById("total-amount").innerHTML
@@ -393,10 +394,62 @@
                 success :(response) => {
                     if(response.codSuccess == true){
                         location.href = "/order-placed"
+                    }else {
+                        razorpayPayment(response.order)
                     }
                 }
             })
         })
+
+        function razorpayPayment(order) {
+            var options = {
+              key: "rzp_test_EZV83G5JC3gjfZ",
+              amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+              currency: "INR",
+              name: "HUFIKO",
+              description: "Test Transaction",
+              image: "https://example.com/your_logo",
+              order_id: order.id,
+              handler: function (response) {
+                verifyPayment(response, order);
+              },
+              prefill: {
+                name: "Gaurav Kumar",
+                email: "gaurav.kumar@example.com",
+                contact: "9000090000",
+              },
+              notes: {
+                address: "Razorpay Corporate Office",
+              },
+              theme: {
+                color: "#3399cc",
+              },
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+          }
+
+          function verifyPayment(payment, order) {
+            console.log(payment);
+            $.ajax({
+              url: "/verify-payment",
+              method: "post",
+              data: {
+                payment,
+                order,
+              },
+              success: (response) => {
+                if (response.success) {
+                  location.href = "/order-placed";
+                } else {
+                  alert("payment failed");
+                }
+              },
+            });
+            console.log(order);
+          }
+
+// Coupon Code
         function applyCoupon(value){
             const amount = document.getElementById("total-amount").innerHTML
             $.ajax({

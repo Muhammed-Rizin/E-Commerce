@@ -32,6 +32,9 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+    },
+    paymentId :{
+        type : String
     }
 },
   {
