@@ -92,6 +92,9 @@ userRoute.post('/delete-wishlist-item',session.notLogged,userController.deleteWi
 // Add to cart wish list
 userRoute.post('/add-to-cart-wishlist',session.notLogged,userController.addToCartWishlist)
 
+// Apply coupon
+userRoute.post('/apply-coupon',userController.applyCoupon)
+
 // Contact
 userRoute.get('/contact',userController.contact)
 

@@ -8,6 +8,7 @@ const session = require('../middleware/adminSession')
 const product = require('../controller/productManagment')
 const user = require('../controller/user-managment')
 const order = require('../controller/order-managment')
+const Coupon = require('../controller/coupon-Managment')
 
 
 
@@ -91,7 +92,19 @@ adminRoute.get('/view-order',session.Logged,order.viewOrder)
 
 // Update Order status
 adminRoute.post('/update-status',order.updateStatus)
-
 adminRoute.post('/delete-image',session.Logged,product.deleteSingle)
+
+// Coupon
+adminRoute.get('/coupon',session.Logged,Coupon.viweCoupon)
+
+// Add Coupon
+adminRoute.get('/add-coupon',session.Logged,Coupon.addCoupon)
+adminRoute.post('/add-coupon',Coupon.postAddCoupon)
+
+// Edit COupon
+adminRoute.get('/edit-coupon',session.Logged,Coupon.editCoupon)
+adminRoute.post('/edit-coupon',session.Logged,Coupon.updateCoupon)
+
+adminRoute.get('/delete-coupon',session.Logged,Coupon.deleteCoupon)
 
 module.exports =adminRoute

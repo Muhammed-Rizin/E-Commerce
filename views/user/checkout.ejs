@@ -220,10 +220,10 @@
             <div class="col-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
+
+                        <input type="text" placeholder="Coupon code" id="couponInput">
+                        <button onclick="applyCoupon($('#couponInput').val())">Apply</button>
+
                 </div>
             </div>
         </div>
@@ -248,11 +248,13 @@
                                              <%= value.number %>
                                             </label>
                                         </div>
-                                        <div class="col-2">
-                                            <button disabled class="site-btn" > 
-                                                <a href="/delete-address?id=<%=value._id%>" style="color: #fff;"> Delete </a>
-                                            </button>
-                                        </div>
+                                        <% if(address.length != 1){ %>
+                                            <div class="col-2">
+                                                <button disabled class="site-btn" > 
+                                                    <a href="/delete-address?id=<%=value._id%>" style="color: #fff;"> Delete </a>
+                                                </button>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>                       
                             <%}) %>
@@ -268,6 +270,7 @@
                                 </ul>
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span>$<%= total %></span></li>
+                                    <li>Discount <span>$ <span id="discount-amount" >0</span></span></li>
                                     <li>Total <span id="total-amount"><%= total %></span><span>$</span></li>
                                 </ul>
                                 
@@ -394,7 +397,31 @@
                 }
             })
         })
-
+        function applyCoupon(value){
+            const amount = document.getElementById("total-amount").innerHTML
+            $.ajax({
+                url : '/apply-coupon',
+                method : 'post',
+                data  :{
+                    code : value,
+                    amount : amount
+                }
+            }).done((response)=>{
+                if(response.success){
+                    document.getElementById('discount-amount').innerHTML = response.discount
+                    document.getElementById('total-amount').innerHTML = response.discountTotal
+                    swal("Added!", "Coupon added successfully!", "success");
+                }else if(response.minimumPurchaseAmount){
+                    swal("Oops!", `Minimum purchase amount required $ ${response.minimumAmount}`, "error")
+                }else if(response.cantUse){
+                    swal("Oops!", `Maximum count used`, "error")
+                }else if(response.expired){
+                    swal("Oops!", `Code Expired`, "error")
+                }else {
+                    swal("Oops!", `Somthing wrong with coupon`, "error")
+                }
+            })
+        }
         
     </script>
 </body>

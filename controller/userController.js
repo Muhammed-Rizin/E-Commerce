@@ -17,6 +17,7 @@ const Category = require('../model/categoryModel')
 const Cart = require('../model/cart-model')
 const Order = require('../model/order-model');
 const WishList = require('../model/wishlist-model')
+const Coupon = require ('../model/coupon-model')
 const { now } = require('mongoose');
 const { response } = require('../Routes/userRoute');
 
@@ -856,7 +857,6 @@ const addToCartWishlist = async (req,res) => {
             if(userCart) {
                 const productExist = await userCart.product.findIndex( product => product.productId == productId)
                 if(productExist != -1){
-
                     const cartData = await Cart.findOne(
                         {user : userId, "product.productId" : productId},
                         {"product.productId.$" : 1 , "product.quantity" : 1})
@@ -924,6 +924,47 @@ const about = (req, res) => {
     }
 }
 
+// coupon apply
+const applyCoupon = async (req,res) => {
+    const code = req.body.code
+    const amount = req.body.amount
+    const name = req.session.user
+
+    const userData = await User.findOne({user_name : name})
+    const alreadyCoupon =  await Coupon.findOne({code : code, used : {$in : [userData._id]}})
+
+    if(alreadyCoupon){
+        res.json({alreadyUsed : true})
+    }else {
+        const couponData = await Coupon.findOne({code : code})
+        if(couponData){
+            if(couponData.exipireDate >= new Date()){
+                if(couponData.limit != 0){
+                    if(couponData.minimumPurchaseAmount  <= amount){
+                        const n = -1
+                        await Coupon.findByIdAndUpdate(couponData._id ,{$push : {used : userData._id}})
+                        await Coupon.findByIdAndUpdate(couponData._id, {$inc : {limit : n}})
+
+                        const discount = couponData.amount
+                        const discountTotal = amount-discount
+                        req.session.coupon = couponData._id
+                        res.json({success : true,discountTotal,discount,code})
+                    }else {
+                        const minimumAmount = couponData.minimumPurchaseAmount
+                        res.json({minimumPurchaseAmount : true, minimumAmount})
+                    }
+                }else {
+                    res.json({cantUse : true})
+                }
+            }else{
+            res.json({expired : true})
+            }
+        }else {
+            res.json({success : false})
+        }
+    }
+}
+
 module.exports = {
     loadHome,
     postLogin,
@@ -959,5 +1000,6 @@ module.exports = {
     wishList,
     addToWishlist,
     deleteWishItem,
-    addToCartWishlist
+    addToCartWishlist,
+    applyCoupon
 }

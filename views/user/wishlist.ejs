@@ -298,7 +298,6 @@
                   },
                 }).done((data) => {
                   if (data.success) {
-                    location.reload();
                   }else if(data.outofstock){
 			        swal("Oops!", "Out of stock", "error")
 		          }else{
