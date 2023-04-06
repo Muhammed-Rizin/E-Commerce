@@ -65,19 +65,16 @@ const updateCoupon = async (req,res) => {
         const amount = req.body.amount
         const mincart = req.body.mincart
         const limit = parseInt(req.body.limit) 
-        const date = req.body.date
+        // const date = req.body.date
 
-        console.log(id);
         const data = await Coupon.findByIdAndUpdate(id,{
             $set : {
                 code : name,
                 amount : amount,
                 minimumPurchaseAmount : mincart,
-                exipireDate : date,
                 limit : limit
             }
         })
-        console.log(data);
 
         res.redirect('/admin/coupon')
     } catch (error) {
