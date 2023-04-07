@@ -493,7 +493,7 @@ const cart = async (req, res) => {
                             $group :{
                                 _id : null,
                                 total : {
-                                    $sum : {
+                                    $sum :  {
                                         $multiply : ["$quantity","$price"]
                                     }
                                 }
@@ -628,14 +628,16 @@ const checkout = async(req, res) => {
                     _id : null,
                     total : {
                         $sum : {
-                            $multiply : ["$quantity","$price"]
+                            $multiply : ["$quantity","$price"],
                         }
                     }
                 }
             }
         ]).exec()
         Total = total[0].total
-            res.render('user/checkout', {user : userName, address : userData.address, total : Total, data : cartData.product})
+        const sum = Total-userData.wallet
+        const walletAmount = userData.wallet
+            res.render('user/checkout', {user : userName, address : userData.address, total : Total, sum, walletAmount, data : cartData.product})
         } else {
             res.render('user/checkout', { message: "User Logged" })
         }
@@ -807,6 +809,7 @@ const viewOrder = async (req,res) => {
 const returnOrder = async (req,res) => {
     try {
         const orderId = req.query.id
+        
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending'}})
         res.redirect('/orders')
     } catch (error) {
@@ -819,6 +822,10 @@ const returnOrder = async (req,res) => {
 const cancelOrder = async (req,res) => {
     try {
         const orderId = req.query.id
+        const orderData = await Order.findById(orderId)
+        const total = orderData.totalAmount
+
+        await User.findByIdAndUpdate(orderData.user,{$inc : {wallet : total}})
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'cancelled'}})
         res.redirect('/orders')
     } catch (error) {

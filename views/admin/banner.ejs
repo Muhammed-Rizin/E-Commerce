@@ -131,7 +131,7 @@
                                         <th scope="col">#</th>
                                         <th scope="col">Image</th>
                                         <th scope="col">Heading</th>
-                                        <th scope="col">Discription</th>
+                                        <th scope="col">Description</th>
                                         <th scope="col">Satus</th>
                                         <th scope="col">Option</th>
                                     </tr>
@@ -143,7 +143,7 @@
                                             <td><%= index+1 %></td>
                                             <td><img src="/product-images/<%= value.image %>" width="288px" height="150px" alt="<%= value.image %>"></td>
                                             <td><%= value.heading %></td>
-                                            <td><%= value.discription %></td>
+                                            <td><%= value.description %></td>
                                             <td><%= value.status %></td>
                                             <% if(value.status==false){ %>
                                                 <td><a href="/admin/show-banner?id=<%= value._id %>"><button class="btn btn-success" onclick="return showconfirm(this)">show</button></a></td>

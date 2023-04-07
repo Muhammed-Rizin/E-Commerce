@@ -30,7 +30,11 @@ const updateStatus = async (req,res) => {
     try {
         const status = req.body.status
         const orderId = req.body.orderId
-        
+        if(status == "Return Approved"){
+            const order = await Order.findById(orderId)
+            const total = order.totalAmount
+            await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+        }
         await Order.findByIdAndUpdate(orderId,{status : status})
         res.redirect('/admin/show-orders')
 

@@ -22,12 +22,12 @@ const addBanner = async (req,res) => {
 const insertBanner = async (req,res) => {
     try {
         const heading = req.body.heading
-        const discription = req.body.discription
+        const description = req.body.description
         const image = req.file.filename
         
         const data = new Banner({
             heading : heading,
-            discription : discription,
+            description : description,
             image : image,
             
         })
