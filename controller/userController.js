@@ -804,7 +804,7 @@ const viewOrder = async (req,res) => {
 const returnOrder = async (req,res) => {
     try {
         const orderId = req.query.id
-        await Order.findByIdAndUpdate(orderId,{$set : {status : 'returned'}})
+        await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending'}})
         res.redirect('/orders')
     } catch (error) {
         console.log(error.message)

@@ -46,7 +46,7 @@ const addCategory = (req,res) => {
 const insertCategory = async (req,res) => {
     try {
         const name = req.body.name
-        const alredyCategory = await Category.findOne({name : name})
+        const alredyCategory = await Category.findOne({name : {$regex : name , $options : 'i'}})
         if(alredyCategory){
             res.render('admin/add-Category',{message : "Category Already Created"})
         }else{

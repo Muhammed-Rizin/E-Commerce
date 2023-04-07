@@ -150,8 +150,7 @@
 
                             <% if(value.status == 'Delivered'){%>
                                 <td><a href="/return-order?id=<%= value._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button></a></td>  
-                            <%}else if(value.status == 'returned'){ %>
-                            <%}else if(value.status == 'cancelled'){ %>
+                            <%}else if(value.status == 'returned' || value.status == "Return Rejected" || value.status == "Return Approved" || value.status == 'cancelled' || value.status == "Return Pending" ){ %>
                             <%}else{ %>
                                     <td><a href="/cancel-order?id=<%= value._id %>"><button type="button" class="btn btn-danger m-2" onclick="return cancelConforme(this)">Cancel</button></a></td>         
                             <% } %>

@@ -186,6 +186,11 @@
                             <h6 class="mb-4">Add Coupon</h6>
                             <form action="/admin/add-coupon" method="post">
                                 <div class="form-group mt-3">
+                                    <% if(typeof message !=='undefined' ){%>
+                                        <p style="color: red;">
+                                          <%= message %>
+                                        </p>
+                                    <% } %>
                                     <label for="exampleInputName1 ms-1">Coupon Name</label>
                                     <input type="text" class="form-control mt-2" id="name"  name="name" placeholder="Coupon Name" required>
                                   </div>
