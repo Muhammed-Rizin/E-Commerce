@@ -9,6 +9,7 @@ const product = require('../controller/productManagment')
 const user = require('../controller/user-managment')
 const order = require('../controller/order-managment')
 const Coupon = require('../controller/coupon-Managment')
+const Banner = require('../controller/banner-controller')
 
 
 
@@ -105,6 +106,17 @@ adminRoute.post('/add-coupon',Coupon.postAddCoupon)
 adminRoute.get('/edit-coupon',session.Logged,Coupon.editCoupon)
 adminRoute.post('/edit-coupon',session.Logged,Coupon.updateCoupon)
 
+// Delete Coupon
 adminRoute.get('/delete-coupon',session.Logged,Coupon.deleteCoupon)
+
+// Banner
+adminRoute.get('/banner',session.Logged,Banner.viewBanner)
+
+// Add Banner
+adminRoute.get('/add-banner',session.Logged,Banner.addBanner)
+adminRoute.post('/add-banner',upload.single('image'),Banner.insertBanner)
+
+// Unlist banner
+adminRoute.get('/show-banner',session.Logged,Banner.unlistBanner)
 
 module.exports =adminRoute

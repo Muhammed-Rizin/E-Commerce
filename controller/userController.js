@@ -1,4 +1,5 @@
 const User = require('../model/userModel')
+
 const bcrypt = require('bcrypt');
 const { Session } = require('express-session');
 const nodemailer = require('nodemailer')
@@ -26,6 +27,7 @@ const Cart = require('../model/cart-model')
 const Order = require('../model/order-model');
 const WishList = require('../model/wishlist-model')
 const Coupon = require ('../model/coupon-model')
+const Banner = require('../model/banner-model')
 const { now } = require('mongoose');
 const { response } = require('../Routes/userRoute');
 
@@ -87,10 +89,11 @@ const verifyEmail = async (req,res) => {
 const loadHome = async (req, res) => {
     try {
         const productData = await Product.find({})
+        const banner = await Banner.find({status : true})
         if (req.session.user) {
-            res.render('user/home', { user: req.session.user, data : productData })
+            res.render('user/home', { user: req.session.user, data : productData , banner})
         } else {
-            res.render('user/home', { message: "User Logged", data : productData })
+            res.render('user/home', { message: "User Logged", data : productData , banner})
         }
     } catch (error) {
         console.log(error.message)
