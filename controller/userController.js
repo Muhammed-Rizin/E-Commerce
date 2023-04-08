@@ -635,8 +635,15 @@ const checkout = async(req, res) => {
             }
         ]).exec()
         Total = total[0].total
-        const sum = Total-userData.wallet
-        const walletAmount = userData.wallet
+        let sum;
+        let walletAmount = userData.wallet
+        if(walletAmount >= Total){
+            walletAmount = Total-1
+             sum = Total-walletAmount
+        }else {
+             sum = Total-walletAmount
+        }
+        
             res.render('user/checkout', {user : userName, address : userData.address, total : Total, sum, walletAmount, data : cartData.product})
         } else {
             res.render('user/checkout', { message: "User Logged" })
@@ -696,10 +703,12 @@ const placeOrder = async (req,res) => {
         const address = req.body.address
         const payment = req.body.payment
         const totalAmount = req.body.total
+        const walletAmount = req.body.walletAmount
         const userName = req.session.user
         const userData = await User.findOne({user_name : userName})
         const cartData = await Cart.findOne({user : userData._id})
         const product = cartData.product
+
     
         const status = payment === "COD" ? "Placed" : "Pending"
         const newOrder = new Order({
@@ -709,17 +718,17 @@ const placeOrder = async (req,res) => {
             product : product,
             totalAmount : totalAmount,
             Date : new Date(),
-            status : status
+            status : status,
+            wallet : walletAmount
         })
         await newOrder.save()
         const orderId = newOrder._id
         const total = newOrder.totalAmount
         await Cart.deleteOne({user : userData._id})
-    
-        console.log(total);
-        
-        
+
+
         if (status === "Placed") {
+            await User.findByIdAndUpdate(userData._id,{$inc : {wallet : -newOrder.wallet}})
             for(i=0;i < product.length; i++){
                 // const [{productId : productId, quantity : quantity}] = product
                 const productId = product[i].productId
@@ -728,6 +737,7 @@ const placeOrder = async (req,res) => {
             }
             res.json({ codSuccess: true });
         }else {
+            await User.findByIdAndUpdate(userData._id,{$inc : {wallet : -newOrder.wallet}})
             for(i=0;i < product.length; i++){
                 // const [{productId : productId, quantity : quantity}] = product
                 const productId = product[i].productId
@@ -740,7 +750,6 @@ const placeOrder = async (req,res) => {
                 receipt: "" + orderId
               };
               instance.orders.create(options, (err, order) => {
-                console.log(order);
                 res.json({order})
               });
         }
@@ -823,10 +832,24 @@ const cancelOrder = async (req,res) => {
     try {
         const orderId = req.query.id
         const orderData = await Order.findById(orderId)
-        const total = orderData.totalAmount
+        const wallet = orderData.wallet
+        const total = orderData.totalAmount + wallet
 
-        await User.findByIdAndUpdate(orderData.user,{$inc : {wallet : total}})
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'cancelled'}})
+        
+        if(orderData.paymentMethod == "COD"){
+            await User.findByIdAndUpdate(orderData.user,{$inc : {wallet : wallet}})
+        }else {
+            await User.findByIdAndUpdate(orderData.user,{$inc : {wallet : total}})
+        }
+
+        for(i=0;i < orderData.product.length; i++){
+            // const [{productId : productId, quantity : quantity}] = product
+            const productId = orderData.product[i].productId
+            const quantity = orderData.product[i].quantity
+            await Product.findByIdAndUpdate(productId,{$inc : {stock : quantity}})
+        }
+
         res.redirect('/orders')
     } catch (error) {
         console.log(error.message)
