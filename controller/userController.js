@@ -29,7 +29,7 @@ const WishList = require('../model/wishlist-model')
 const Coupon = require ('../model/coupon-model')
 const Banner = require('../model/banner-model')
 const { now } = require('mongoose');
-const { response } = require('../Routes/userRoute');
+const { response, search } = require('../Routes/userRoute');
 
 //bcypt
 const securePassword = async (password) => {
@@ -818,7 +818,6 @@ const viewOrder = async (req,res) => {
 const returnOrder = async (req,res) => {
     try {
         const orderId = req.query.id
-        
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending'}})
         res.redirect('/orders')
     } catch (error) {
@@ -1056,6 +1055,41 @@ const applyCoupon = async (req,res) => {
     }
 }
 
+
+const shop = async (req,res) => {
+    try {
+        const price = req.query.value || "default"
+        const category = req.query.category || "All"
+        let Search = req.body.text || "All"
+        Search = Search.trim()
+
+        const categoryData = await Category.find({blocked : false})
+    
+        if(price == "zero-to-fifty"){
+            const productData = await Product.find({blocked : false, price : {$lte : 50}})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData})
+        }else if(price == "fifty-to-hundred"){
+            const productData = await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData})
+        }else if(price == "hundred-to-null"){
+            const productData = await Product.find({blocked : false, price : {$gte : 100}})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData})
+        }else if(category != "All"){
+            const productData = await Product.find({category : category},{blocked : false})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData})
+        }else if(Search != "All"){
+            const productData = await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData})
+        }else {
+            res.redirect('/product')
+        }
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadHome,
     postLogin,
@@ -1093,5 +1127,6 @@ module.exports = {
     deleteWishItem,
     addToCartWishlist,
     applyCoupon,
-    verifyPayment
+    verifyPayment,
+    shop
 }

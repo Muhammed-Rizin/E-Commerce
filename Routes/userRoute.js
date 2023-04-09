@@ -102,5 +102,8 @@ userRoute.get('/contact',userController.contact)
 // About
 userRoute.get('/about',userController.about)
 
+// Search Sort Filter
+userRoute.get('/shop',userController.shop)
+userRoute.post('/shop',userController.shop)
 
 module.exports =userRoute
