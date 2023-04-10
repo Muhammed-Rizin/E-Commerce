@@ -87,6 +87,7 @@ adminRoute.get('/block-user',session.Logged,user.blockUser)
 
 // Order 
 adminRoute.get('/show-orders',session.Logged,order.showOrders)
+adminRoute.get('/orders',session.Logged,order.orders)
 
 // View Order
 adminRoute.get('/view-order',session.Logged,order.viewOrder)

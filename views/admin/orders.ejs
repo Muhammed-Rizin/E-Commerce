@@ -123,10 +123,18 @@
                 <div class="row pt-4 g-4">
                     <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
+                            <select name="price" id="price" onchange="location = '/admin/orders?value='+value"  style="background-color: transparent; border-radius: 30px; font-size: 15px; margin-bottom: 10px; padding: 5px; float: right;" >
+                                
+                                    <option value="default" selected> ALL</option>
+                                    <option value="COD"> COD </option>
+                                    <option value="Online"> Online </option>
+
+                            </select>
                             <table class="table" id="categorytable">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col">Order ID</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Total Amount</th>
                                         <th scope="col">Method</th>
@@ -140,6 +148,7 @@
                                     <% data.reverse().forEach((value,index)=>{ %>
                                         <tr>
                                             <td><%= index+1 %></td>
+                                            <td><%- value._id %></td>
                                             <td><%= value.Date.toISOString().substring(0,10) %></td>
                                             
                                             <td><%= value.totalAmount %></td>

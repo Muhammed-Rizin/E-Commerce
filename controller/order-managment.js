@@ -43,8 +43,27 @@ const updateStatus = async (req,res) => {
     }
 }
 
+const orders = async (req,res) => {
+    try {
+        const value = req.query.value || "Default"
+        
+        if(value == "COD"){
+            const data = await Order.find({paymentMethod : "COD"})
+            res.render('admin/orders',{ data , message : 'COD' })
+        }else if (value == "Online"){
+            const data = await Order.find({paymentMethod : "online"})
+            res.render('admin/orders',{ data , message : 'Online'})
+        }else {
+            res.redirect('/admin/show-orders')
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports ={
     showOrders,
     viewOrder,
-    updateStatus
+    updateStatus,
+    orders
 }
