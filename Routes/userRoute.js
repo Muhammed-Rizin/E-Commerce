@@ -33,6 +33,7 @@ userRoute.get('/verify',session.logged,userController.verifyEmail)
 
 // Product
 userRoute.get('/product',userController.loadProducts)
+userRoute.post('/product',userController.loadProducts)
 
 // Product view
 userRoute.get('/view-product',session.notLogged,userController.viewProduct)
@@ -72,6 +73,8 @@ userRoute.post('/verify-payment',userController.verifyPayment)
 // order list
 userRoute.get('/orders',session.notLogged,userController.orderPlaced)
 
+userRoute.get('/order-history',session.notLogged,userController.orderHistory)
+
 // View Order
 userRoute.get('/view-order',session.notLogged,userController.viewOrder)
 
@@ -103,7 +106,7 @@ userRoute.get('/contact',userController.contact)
 userRoute.get('/about',userController.about)
 
 // Search Sort Filter
-userRoute.get('/shop',userController.shop)
-userRoute.post('/shop',userController.shop)
+// userRoute.get('/shop',userController.shop)
+// userRoute.post('/shop',userController.shop)
 
 module.exports =userRoute

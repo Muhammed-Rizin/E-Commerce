@@ -85,7 +85,7 @@
                             <li class="active"><a href="/product">Products</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">                             
-                                    <li><a href="/orders">Orders</a></li>
+                                    <li><a href="/order-history">Orders</a></li>
                                 </ul>
                             </li>
                             <li><a href="/contact">Contacts</a></li>
@@ -130,7 +130,7 @@
                 <div class="col-lg-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
-                            <form action="/shop" method="post">
+                            <form action="/product" method="post">
                                 <input type="text" name="text" placeholder="Search...">
                                 <button type="submit"><span class="fa fa-search"></span></button>
                             
@@ -147,7 +147,7 @@
                                                 <ul>
                                                     <% category.forEach((value,index)=>{ %>
                                                         
-                                                        <li><a href="/shop?category=<%= value.name %>"><%=value.name%></a></li>
+                                                        <li><a href="/product?category=<%= value.name %>"><%=value.name%></a></li>
                                                     
                                                     <%}) %>
                                                 </ul>
@@ -170,14 +170,29 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="shop__product__option__right">
                                     <p>Sort by Price:</p>
-                                    <form action="/product" name="sort-product" id="sort" method="get">
-                                    <select name="price" id="price" onchange="location = '/shop?value='+value" >
-                                        <option value="default" selected> Low To High</option>
-                                        <option value="zero-to-fifty">$0 - $50 </option>
-                                        <option value="fifty-to-hundred">$50 - $100</option>
-                                        <option value="hundred-to-null">$100+</option>
+                                    <select name="price" id="price" onchange="location = '/product?value='+value" >
+                                        <% if(price == "zero-to-fifty"){ %>
+                                            <option value="default"> Low To High</option>
+                                            <option value="zero-to-fifty" selected>$0 - $50 </option>
+                                            <option value="fifty-to-hundred">$50 - $100</option>
+                                            <option value="hundred-to-null">$100+</option>
+                                        <% } else if(price == "fifty-to-hundred"){%>
+                                            <option value="default" > Low To High</option>
+                                            <option value="zero-to-fifty">$0 - $50 </option>
+                                            <option value="fifty-to-hundred"selected>$50 - $100</option>
+                                            <option value="hundred-to-null">$100+</option>
+                                        <%} else if(price == "hundred-to-null"){%>
+                                            <option value="default" > Low To High</option>
+                                            <option value="zero-to-fifty">$0 - $50 </option>
+                                            <option value="fifty-to-hundred">$50 - $100</option>
+                                            <option value="hundred-to-null" selected>$100+</option>
+                                        <%} else {%>
+                                            <option value="default" selected> Low To High</option>
+                                            <option value="zero-to-fifty">$0 - $50 </option>
+                                            <option value="fifty-to-hundred">$50 - $100</option>
+                                            <option value="hundred-to-null" >$100+</option>
+                                        <%} %>
                                     </select>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -212,11 +227,18 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="product__pagination">
-                                <a class="active" href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <span>...</span>
-                                <a href="#">21</a>
+                                <% for(i=0;i < totalPage; i++){ %>
+                                    <% if(i+1 == page){ %> 
+                                        <a href="/product?page=<%= i+1 %>" class="active"><%= i+1 %></a>
+                                    <%} else { %>
+                                        <a href="/product?page=<%= i+1 %>"><%= i+1 %></a>
+                                    <% }%>
+                                <% } %>
+                                    <!-- <a class="active" href="/product">1</a>
+                                    <a href="/product?page=2">2</a>
+                                    <a href="#">3</a>
+                                    <span>...</span>
+                                    <a href="#">21</a> -->
                             </div>
                         </div>
                     </div>
