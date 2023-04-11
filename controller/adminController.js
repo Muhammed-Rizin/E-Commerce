@@ -5,7 +5,8 @@ const loadHome = (req,res) => {
     try {
         res.render('admin/dashboard')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -18,7 +19,8 @@ const loadLogin = (req,res) => {
             res.render('admin/log-in')
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 const postLogin = async(req,res) => {
@@ -38,7 +40,8 @@ const postLogin = async(req,res) => {
             res.render('admin/log-in',{message : "Entered Password or Email is Incorrect"})
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -49,7 +52,8 @@ const logOut = (req,res) => {
         req.session.Admin = false
         res.redirect('/admin')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 module.exports ={

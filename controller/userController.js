@@ -72,6 +72,7 @@ const sendVerifyMail = async (name,email)=>{
         })
     } catch (error) {
         console.log(error.message);
+        res.render('user/505')
     }
 }
 
@@ -309,6 +310,7 @@ const sendResetPasswordMail = async (name,email,token)=>{
         })
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -356,8 +358,6 @@ const loadProducts = async (req, res) => {
 
         const productCount = (await Product.find({blocked : false})).length
         const totalPage = Math.ceil(productCount/limit)
-        console.log(productCount,totalPage);
-
         const categoryData = await Category.find({blocked : false})
         if(req.session.user){
             if(price == "zero-to-fifty"){
@@ -630,7 +630,6 @@ const totalProductPrice = async (req,res) => {
             }
         ])
         let Total = total[0].total
-        console.log(Total);
         res.json({success : true, Total})
     } catch (error) {
         console.log(error.message);
@@ -836,6 +835,7 @@ const verifyPayment = async (req,res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('user/505')
     }
 }
 
@@ -863,6 +863,7 @@ const orderHistory = async (req,res) => {
         res.render('user/order-history', {user : req.session.user ,data :data, totalPage, page,skip })
     } catch (error) {
         console.log(error.message);
+        res.render('user/505')
     }
 }
 
@@ -883,7 +884,6 @@ const viewOrder = async (req,res) => {
 const returnConforme = async (req,res) => {
     try {
         const id = req.query.id
-        console.log(id);
         res.render('user/return', {id})
     } catch (error) {
         console.log(error.message)
@@ -894,7 +894,6 @@ const returnOrder = async (req,res) => {
     try {
         const orderId = req.body.id
         const reason = req.body.reason
-        console.log(orderId);
         await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending', reason : reason}})
         res.redirect('/order-history')
     } catch (error) {
@@ -1057,6 +1056,7 @@ const addToCartWishlist = async (req,res) => {
                         product:[{productId : productId, price : productData.price}]
                     })
                     const result = await data.save()
+                    await WishList.findOneAndUpdate({"product.productId" : productId},{$pull : {product :{productId : productId}}})
                     if(result){
                         res.json({success:true})
                     }
@@ -1093,42 +1093,48 @@ const about = (req, res) => {
 
 // coupon apply
 const applyCoupon = async (req,res) => {
-    const code = req.body.code
-    const amount = req.body.amount
-    const name = req.session.user
-
-    const userData = await User.findOne({user_name : name})
-    const alreadyCoupon =  await Coupon.findOne({code : code, used : {$in : [userData._id]}})
-
-    if(alreadyCoupon){
-        res.json({alreadyUsed : true})
-    }else {
-        const couponData = await Coupon.findOne({code : code})
-        if(couponData){
-            if(couponData.exipireDate >= new Date()){
-                if(couponData.limit != 0){
-                    if(couponData.minimumPurchaseAmount  <= amount){
-                        const n = -1
-                        await Coupon.findByIdAndUpdate(couponData._id ,{$push : {used : userData._id}})
-                        await Coupon.findByIdAndUpdate(couponData._id, {$inc : {limit : n}})
-
-                        const discount = couponData.amount
-                        const discountTotal = amount-discount
-                        req.session.coupon = couponData._id
-                        res.json({success : true,discountTotal,discount,code})
-                    }else {
-                        const minimumAmount = couponData.minimumPurchaseAmount
-                        res.json({minimumPurchaseAmount : true, minimumAmount})
-                    }
-                }else {
-                    res.json({cantUse : true})
-                }
-            }else{
-            res.json({expired : true})
-            }
+    try {
+        const code = req.body.code
+        const amount = req.body.amount
+        const name = req.session.user
+    
+        const userData = await User.findOne({user_name : name})
+        const alreadyCoupon =  await Coupon.findOne({code : code, used : {$in : [userData._id]}})
+    
+        if(alreadyCoupon){
+            res.json({alreadyUsed : true})
         }else {
-            res.json({success : false})
+            const couponData = await Coupon.findOne({code : code})
+            if(couponData){
+                if(couponData.exipireDate >= new Date()){
+                    if(couponData.limit != 0){
+                        if(couponData.minimumPurchaseAmount  <= amount){
+                            const n = -1
+                            await Coupon.findByIdAndUpdate(couponData._id ,{$push : {used : userData._id}})
+                            await Coupon.findByIdAndUpdate(couponData._id, {$inc : {limit : n}})
+    
+                            const discount = couponData.amount
+                            const discountTotal = amount-discount
+                            req.session.coupon = couponData._id
+                            res.json({success : true,discountTotal,discount,code})
+                        }else {
+                            const minimumAmount = couponData.minimumPurchaseAmount
+                            res.json({minimumPurchaseAmount : true, minimumAmount})
+                        }
+                    }else {
+                        res.json({cantUse : true})
+                    }
+                }else{
+                res.json({expired : true})
+                }
+            }else {
+                res.json({success : false})
+            }
         }
+        
+    } catch (error) {
+        console.log(error.message);
+        res.render('user/505')
     }
 }
 
@@ -1143,7 +1149,6 @@ const shop = async (req, res) => {
         let Search = req.body.text || "All"
         Search = Search.trim()
 
-        console.log(price, category);
 
         const postPrice = req.body.pri || "default"
         const postCategory = req.body.cat || "All"
@@ -1156,7 +1161,6 @@ const shop = async (req, res) => {
         const categoryData = await Category.find({blocked : false})
         if(req.session.user){
             if(price == "zero-to-fifty"){
-                console.log(category , "matched");
                 if(category != "All"){
                     if(Search != "All"){
                         const productData = 
@@ -1196,7 +1200,6 @@ const shop = async (req, res) => {
                 }
             }else if(price == "fifty-to-hundred"){
                 if(category != "All"){
-                    console.log(category , "matched");
                     if(Search != "All"){
                         const productData = 
                         await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}],

@@ -7,7 +7,8 @@ const category = async (req,res) => {
         const categories = await Category.find({})
         res.render('admin/category',{data : categories})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -21,7 +22,8 @@ const editCategory = async (req,res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -30,7 +32,8 @@ const updatCategory = async (req,res) => {
         await Category.findByIdAndUpdate({_id : req.body.id},{$set : {name : req.body.name}})
         res.redirect('/admin/category')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -39,7 +42,8 @@ const addCategory = (req,res) => {
     try {
         res.render('admin/add-Category')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -61,7 +65,8 @@ const insertCategory = async (req,res) => {
 
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 

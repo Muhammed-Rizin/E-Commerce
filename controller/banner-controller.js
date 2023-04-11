@@ -6,7 +6,8 @@ const viewBanner = async (req,res)=>{
         const bannerData = await Banner.find()
         res.render('admin/banner',{data : bannerData})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -15,7 +16,8 @@ const addBanner = async (req,res) => {
     try {
         res.render('admin/add-banner')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -38,7 +40,8 @@ const insertBanner = async (req,res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -55,7 +58,8 @@ const unlistBanner = async (req,res) => {
         }
         res.redirect('/admin/banner')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 

@@ -7,7 +7,8 @@ const viweCoupon = async (req,res) => {
         const data = await Coupon.find()
         res.render('admin/coupon',{data})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -16,7 +17,8 @@ const addCoupon = async (req,res) => {
     try {
         res.render('admin/add-coupon')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -46,7 +48,8 @@ const postAddCoupon = async (req,res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -58,6 +61,7 @@ const editCoupon = async (req,res) => {
         res.render('admin/edit-coupon', {data})
     } catch (error) {
         console.log(error.message)
+        res.render('user/505')
     }
 }
 
@@ -81,7 +85,8 @@ const updateCoupon = async (req,res) => {
 
         res.redirect('/admin/coupon')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -92,7 +97,8 @@ const deleteCoupon = async (req,res) => {
         await Coupon.findByIdAndDelete(id)
         res.redirect('/admin/coupon')
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 

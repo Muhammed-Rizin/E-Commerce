@@ -7,7 +7,8 @@ const showOrders = async (req,res) => {
         const data = await Order.find()
         res.render('admin/orders', {data : data})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -21,7 +22,8 @@ const viewOrder = async (req,res) =>{
 
         res.render('admin/view-order', {orderData,userData})
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -44,7 +46,8 @@ const updateStatus = async (req,res) => {
         res.redirect('/admin/show-orders')
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 
@@ -62,7 +65,8 @@ const orders = async (req,res) => {
             res.redirect('/admin/show-orders')
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        res.render('user/505');
     }
 }
 

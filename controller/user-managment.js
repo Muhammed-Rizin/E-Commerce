@@ -7,6 +7,7 @@ const showUser = async (req,res) => {
         res.render('admin/user',{data: data})
     } catch (error) {
         console.log(error.message);
+        res.render('user/505')
     }
 }
 
@@ -24,6 +25,7 @@ const blockUser = async (req,res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render('user/505')
     }
 }
 

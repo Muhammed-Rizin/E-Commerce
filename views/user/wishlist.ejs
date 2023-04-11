@@ -110,7 +110,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <a href="/"><img src="/user/assets/img/logo.png" alt=""></a>
+                        <a href="/"><img src="/user/assets/hufiko-logo.png" width="120px" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
@@ -290,6 +290,7 @@
          function addToCart(id) {
             console.log(id);
                 $.ajax({
+                    
                   url: "/add-to-cart-wishlist",
                   method: "post",
                   encoded: true,
@@ -298,6 +299,7 @@
                   },
                 }).done((data) => {
                   if (data.success) {
+                    location.reload()
                   }else if(data.outofstock){
 			        swal("Oops!", "Out of stock", "error")
 		          }else{
