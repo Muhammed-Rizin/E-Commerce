@@ -125,6 +125,7 @@
     <section class="contact spad">
         <div class="container">
             <div class="row">
+                
                 <table class="table" id="categorytable">
                     <thead>
                         <tr>
@@ -139,9 +140,9 @@
                     </thead>
 
                     <tbody>
-                        <% data.reverse().forEach((value,index) => {%>
+                        <% data.forEach((value,index) => {%>
                             <tr>
-                            <td><%= index+1 %></td>
+                            <td><%= index+skip+1 %></td>
                             <td><%= value.Date.toISOString().substring(0,10) %></td>
                             <td>$ <%= value.totalAmount %></td>
                             <td><%= value.paymentMethod %></td>
@@ -149,7 +150,7 @@
                             <td><a href="/view-order?id=<%= value._id %>"><button type="button" class="btn btn-secondary m-2">view</button></a></td> 
 
                             <% if(value.status == 'Delivered'){%>
-                                <td><a href="/return-order?id=<%= value._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button></a></td>  
+                                <td><a href="/return?id=<%= value._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button></a></td>  
                             <%}else if(value.status == 'returned' || value.status == "Return Rejected" || value.status == "Return Approved" || value.status == 'cancelled' || value.status == "Return Pending" ){ %>
                             <%}else{ %>
                                     <td><a href="/cancel-order?id=<%= value._id %>"><button type="button" class="btn btn-danger m-2" onclick="return cancelConforme(this)">Cancel</button></a></td>         
@@ -159,6 +160,20 @@
                     </tbody>
 
                 </table>
+
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <div class="product__pagination">
+                            <% for(i=0;i < totalPage; i++){ %>
+                                <% if(i+1 == page){ %> 
+                                    <a href="/order-history?page=<%= i+1 %>" class="active"><%= i+1 %></a>
+                                <%} else { %>
+                                    <a href="/order-history?page=<%= i+1 %>"><%= i+1 %></a>
+                                <% }%>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

@@ -32,8 +32,13 @@ const updateStatus = async (req,res) => {
         const orderId = req.body.orderId
         if(status == "Return Approved"){
             const order = await Order.findById(orderId)
-            const total = order.totalAmount + order.wallet
-            await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+            if(order.paymentMethod == "COD"){
+                const total = order.wallet
+                await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+            }else {
+                const total = order.totalAmount + order.wallet
+                await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+            }
         }
         await Order.findByIdAndUpdate(orderId,{status : status})
         res.redirect('/admin/show-orders')

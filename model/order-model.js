@@ -38,6 +38,9 @@ const orderSchema = new mongoose.Schema({
     },
     wallet:{
         type : Number
+    },
+    reason : {
+        type : String
     }
 },
   {

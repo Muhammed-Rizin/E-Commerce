@@ -851,9 +851,16 @@ const orderPlaced = async (req,res) => {
 
 const orderHistory = async (req,res) => {
     try {
+        const page = Number(req.query.page ) || 1
+        const limit = 10
+        const skip = (page - 1) * limit
         const userData = await User.findOne({user_name : req.session.user})
-        const data = await Order.find({user : userData._id})
-        res.render('user/order-history', {user : req.session.user ,data :data})
+
+        const orderLength = (await Order.find({user : userData._id})).length
+        const totalPage = Math.ceil(orderLength/limit)
+
+        const data = await Order.find({user : userData._id}).sort({"_id" : -1}).skip(skip).limit(limit)
+        res.render('user/order-history', {user : req.session.user ,data :data, totalPage, page,skip })
     } catch (error) {
         console.log(error.message);
     }
@@ -873,11 +880,23 @@ const viewOrder = async (req,res) => {
 }
 
 // Return COD Order
+const returnConforme = async (req,res) => {
+    try {
+        const id = req.query.id
+        console.log(id);
+        res.render('user/return', {id})
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
+    }
+}
 const returnOrder = async (req,res) => {
     try {
-        const orderId = req.query.id
-        await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending'}})
-        res.redirect('/orders')
+        const orderId = req.body.id
+        const reason = req.body.reason
+        console.log(orderId);
+        await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending', reason : reason}})
+        res.redirect('/order-history')
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
@@ -907,7 +926,7 @@ const cancelOrder = async (req,res) => {
             await Product.findByIdAndUpdate(productId,{$inc : {stock : quantity}})
         }
 
-        res.redirect('/orders')
+        res.redirect('/order-history')
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
@@ -1319,5 +1338,6 @@ module.exports = {
     addToCartWishlist,
     applyCoupon,
     verifyPayment,
-    orderHistory
+    orderHistory,
+    returnConforme
 }

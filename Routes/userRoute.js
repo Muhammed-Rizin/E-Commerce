@@ -79,7 +79,8 @@ userRoute.get('/order-history',session.notLogged,userController.orderHistory)
 userRoute.get('/view-order',session.notLogged,userController.viewOrder)
 
 // Return COD Order
-userRoute.get('/return-order',session.notLogged,userController.returnOrder)
+userRoute.get('/return',session.notLogged,userController.returnConforme)
+userRoute.post('/return-order',session.notLogged,userController.returnOrder)
 
 // Cancel COD Order
 userRoute.get('/cancel-order',session.notLogged,userController.cancelOrder)
