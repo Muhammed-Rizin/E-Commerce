@@ -356,47 +356,71 @@ const loadProducts = async (req, res) => {
         let Search = req.body.text || "All"
         Search = Search.trim()
 
-        const productCount = (await Product.find({blocked : false})).length
-        const totalPage = Math.ceil(productCount/limit)
+        // const productCount = (await Product.find({blocked : false})).length
+        // const totalPage = Math.ceil(productCount/limit)
         const categoryData = await Category.find({blocked : false})
         if(req.session.user){
             if(price == "zero-to-fifty"){
                 const productData = await Product.find({blocked : false, price : {$lte : 50}}).skip(skip).limit(limit)
+                const productCount = (await Product.find({blocked : false, price : {$lte : 50}})).length
+                const totalPage = Math.ceil(productCount/limit)
                 res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, totalPage,page,Search,price})
             }else if(price == "fifty-to-hundred"){
+                const productCount = (await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]}).skip(skip).limit(limit)
                 res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(price == "hundred-to-null"){
+                const productCount = (await Product.find({blocked : false, price : {$gte : 100}})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false, price : {$gte : 100}}).skip(skip).limit(limit)
                 res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(category != "All"){
+                const productCount = (await Product.find({category : category},{blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({category : category},{blocked : false}).skip(skip).limit(limit)
                 res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(Search != "All"){
+                const productCount = (await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false}).skip(skip).limit(limit)
                 res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,page,Search,price, totalPage})
             }else {
+                const productCount = (await Product.find({blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false}).sort({price : 1}).skip(skip).limit(limit)
                 const category = await Category.find({blocked : false})
                 res.render('user/product', { user: req.session.user, data : productData, category : category, totalPage,page,Search,price})
             }
         }else {
             if(price == "zero-to-fifty"){
+                const productCount = (await Product.find({blocked : false, price : {$lte : 50}})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false, price : {$lte : 50}}).skip(skip).limit(limit)
                 res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(price == "fifty-to-hundred"){
+                const productCount = (await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]}).skip(skip).limit(limit)
                 res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(price == "hundred-to-null"){
+                const productCount = (await Product.find({blocked : false, price : {$gte : 100}})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false, price : {$gte : 100}}).skip(skip).limit(limit)
                 res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(category != "All"){
+                const productCount = (await Product.find({category : category},{blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({category : category},{blocked : false}).skip(skip).limit(limit)
                 res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage})
             }else if(Search != "All"){
+                const productCount = (await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false}).skip(skip).limit(limit)
                 res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage})
             }else {
+                const productCount = (await Product.find({blocked : false})).length
+                const totalPage = Math.ceil(productCount/limit)
                 const productData = await Product.find({blocked : false}).sort({price : 1}).skip(skip).limit(limit)
                 const category = await Category.find({blocked : false})
                 res.render('user/product', {  message: "User Logged", data : productData, category : category,page,Search,price, totalPage})

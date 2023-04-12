@@ -33,18 +33,19 @@ const postAddCoupon = async (req,res) => {
         const alreadName = await Coupon.findOne({code : {$regex : name , $options : 'i'}})
         if(alreadName){
             res.render('admin/add-coupon',{message : "Coupon already exist"})
-        }
-        const data = new Coupon({
-            code : name,
-            amount : amount,
-            minimumPurchaseAmount : mincart,
-            exipireDate : date,
-            limit : limit
-        })
-
-        const result = await data.save()
-        if(result){
-            res.redirect('/admin/coupon')
+        }else {
+            const data = new Coupon({
+                code : name,
+                amount : amount,
+                minimumPurchaseAmount : mincart,
+                exipireDate : date,
+                limit : limit
+            })
+    
+            const result = await data.save()
+            if(result){
+                res.redirect('/admin/coupon')
+            }
         }
 
     } catch (error) {
