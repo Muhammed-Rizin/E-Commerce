@@ -778,6 +778,7 @@ const placeOrder = async (req,res) => {
         const totalAmount = req.body.total
         const walletAmount = req.body.walletAmount
         const userName = req.session.user
+        const amount = req.body.amount
         const userData = await User.findOne({user_name : userName})
         const cartData = await Cart.findOne({user : userData._id})
         const product = cartData.product
@@ -792,7 +793,8 @@ const placeOrder = async (req,res) => {
             totalAmount : totalAmount,
             Date : new Date(),
             status : status,
-            wallet : walletAmount
+            wallet : walletAmount,
+            amount : amount
         })
         await newOrder.save()
         const orderId = newOrder._id

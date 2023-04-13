@@ -269,7 +269,7 @@
                                     <% }) %>
                                 </ul>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span>$<%= total %></span></li>
+                                    <li>Subtotal  <span id="subtotal-amount"><%= total %></span><span>$</span></li>
                                     <li>Discount <span>$ <span id="discount-amount" >0</span></span></li>
                                     <li>Wallet <span id="walletAmount"><%= walletAmount %></span><span>$</span></li>
                                     <li>Total <span id="total-amount"><%= sum %></span><span>$</span></li>
@@ -380,6 +380,7 @@
     <script>
         $("#place-order").submit((e)=>{
             const amount = document.getElementById("total-amount").innerHTML
+            const totalAmount = document.getElementById("subtotal-amount").innerHTML
             const walletAmount = document.getElementById("walletAmount").innerHTML
             let address = $("input[name=address]:checked").val()
             let paymentMethod = $("input[name=payment]:checked").val();
@@ -392,7 +393,8 @@
                     total : amount,
                     address : address,
                     payment : paymentMethod,
-                    walletAmount : walletAmount
+                    walletAmount : walletAmount,
+                    amount : totalAmount
                 },
                 success :(response) => {
                     if(response.codSuccess == true){

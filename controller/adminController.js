@@ -1,9 +1,24 @@
 const Admin = require('../model/adminModel')
+const Order = require('../model/order-model')
+const User = require('../model/userModel')
+const Product = require('../model/productModel')
 
 // Home
-const loadHome = (req,res) => {
+const loadHome = async (req,res) => {
     try {
-        res.render('admin/dashboard')
+        const totalSale = await Order.aggregate([
+            {$match : {$and : [{status : {$ne : "cancelled"}},{status : {$ne : "Return Approved"}}]}},
+            {$group : {_id : null, total : {$sum :"$amount"}}}])
+        const totalUsers = await User.aggregate([{$group : {_id : null,total :{$count :{}}}}])
+        const totalProduct = await Product.aggregate([{$group : {_id : null , total : {$count : {}}}}])
+        const totalOrders = await Order.aggregate([
+            {$match : {$and : [{status : {$ne : "cancelled"}},{status : {$ne : "Return Approved"}}]}},
+            {$group : {_id : null, total : {$count : {}}}}])
+
+        const saleChart = await Order.aggregate([{$group : {_id : "$paymentMethod", total : {$count : {}}}}])
+
+        console.log(saleChart);
+        res.render('admin/dashboard',{totalSale , totalUsers, totalProduct, saleChart, totalOrders})
     } catch (error) {
         console.log(error.message)
         res.render('user/505');

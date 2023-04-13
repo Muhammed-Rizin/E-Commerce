@@ -92,6 +92,10 @@ adminRoute.get('/orders',session.Logged,order.orders)
 // View Order
 adminRoute.get('/view-order',session.Logged,order.viewOrder)
 
+// Sales Report
+adminRoute.get('/sales-report',order.salesReport)
+adminRoute.get('/report',order.report)
+
 // Update Order status
 adminRoute.post('/update-status',order.updateStatus)
 adminRoute.post('/delete-image',session.Logged,product.deleteSingle)

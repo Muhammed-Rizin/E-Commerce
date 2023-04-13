@@ -144,7 +144,7 @@
                             <tr>
                             <td><%= index+skip+1 %></td>
                             <td><%= value.Date.toISOString().substring(0,10) %></td>
-                            <td>$ <%= value.totalAmount %></td>
+                            <td>$ <%= value.amount %></td>
                             <td><%= value.paymentMethod %></td>
                             <td><%= value.status %></td>
                             <td><a href="/view-order?id=<%= value._id %>"><button type="button" class="btn btn-secondary m-2">view</button></a></td> 

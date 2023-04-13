@@ -1,5 +1,7 @@
 const Order = require('../model/order-model')
 const User = require('../model/userModel')
+const puppeteer = require('puppeteer')
+const path = require('path')
 
 // Order
 const showOrders = async (req,res) => {
@@ -70,9 +72,49 @@ const orders = async (req,res) => {
     }
 }
 
+// Sales Report
+const salesReport = async (req,res) => {
+    try {
+        const data = await Order.find({status : {$ne : "cancelled"}})
+        res.render('admin/sales-report', {data : data})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const report = async (req,res) => {
+    try {
+        const browser = await puppeteer.launch()
+        const page = await browser.newPage()
+        await page.goto('http://localhost:3000/admin/sales-report' , {
+        waitUntil:"networkidle2"
+        })
+        await page.setViewport({width: 1680 , height: 1050})
+        const todayDate = new Date()
+        const pdfn = await page.pdf({
+            path: `${path.join(__dirname,'../public/files', todayDate.getTime()+".pdf")}`,
+            format: "A4"
+        })
+
+        await browser.close()
+    
+        const pdfUrl = path.join(__dirname,'../public/files', todayDate.getTime()+".pdf")
+
+        res.set({
+            "Content-Type":"application/pdf",
+            "Content-Length":pdfn.length
+        })
+        res.sendFile(pdfUrl)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports ={
     showOrders,
     viewOrder,
     updateStatus,
-    orders
+    orders,
+    salesReport,
+    report
 }

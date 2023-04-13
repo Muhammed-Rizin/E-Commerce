@@ -41,6 +41,9 @@ const orderSchema = new mongoose.Schema({
     },
     reason : {
         type : String
+    },
+    amount :{
+        type : Number
     }
 },
   {

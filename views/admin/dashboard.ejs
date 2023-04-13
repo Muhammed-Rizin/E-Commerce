@@ -29,6 +29,7 @@
 
     <!-- Template Stylesheet -->
     <link href="/admin/styleSheet/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -65,7 +66,7 @@
                     <a href="/admin/category" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
                     <a href="/admin/show-orders" class="nav-item nav-link"><i class="fa fa-id-card-alt me-2"></i>Orders</a>
                     <a href="/admin/coupon" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Coupon</a>
-                    <!-- <a href="/admin/banner" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Banner</a> -->
+                    <a href="/admin/banner" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Banner</a>
                 </div>
             </nav>
         </div>
@@ -104,8 +105,8 @@
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-line fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Today Sale</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Total Revenue</p>
+                                <h6 class="mb-0">$ <%= totalSale[0].total %></h6>
                             </div>
                         </div>
                     </div>
@@ -113,26 +114,26 @@
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                             <i class="fa fa-chart-bar fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Total Sale</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Total Orders</p>
+                                <h6 class="mb-0"><%= totalOrders[0].total %></h6>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-area fa-3x text-primary"></i>
+                            <i class="fa fa-user fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Today Revenue</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Total Users</p>
+                                <h6 class="mb-0"><%= totalUsers[0].total %></h6>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <i class="fab fa-product-hunt fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <p class="mb-2">Total Revenue</p>
-                                <h6 class="mb-0">$1234</h6>
+                                <p class="mb-2">Total Product</p>
+                                <h6 class="mb-0"><%= totalProduct[0].total %></h6>
                             </div>
                         </div>
                     </div>
@@ -147,19 +148,24 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-light text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Worldwide Sales</h6>
-                                <a href="">Show All</a>
+                                <h6 class="mb-0">Orders</h6>
                             </div>
-                            <canvas id="worldwide-sales"></canvas>
+                            <canvas id="pieChart" ></canvas>
+                            <% saleChart.forEach((value) => {   
+                                if(value._id == "COD"){ %>
+                                    <input type="hidden" value="<%= value.total %>" id="value">
+                                <% }else { %>
+                                    <input type="hidden" value="<%= value.total %>" id="value2">
+                            <% }}) %>
                         </div>
                     </div>
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-light text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Salse & Revenue</h6>
-                                <a href="">Show All</a>
+                                <h6 class="mb-0">Worldwide Sales</h6>
+
                             </div>
-                            <canvas id="salse-revenue"></canvas>
+                            <canvas id="myChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -384,5 +390,64 @@
     <!-- Template Javascript -->
     <script src="/admin/javaScript/main.js"></script>
 </body>
+
+<script>
+    const piechart = document.getElementById('pieChart');
+    const cod = parseInt(document.getElementById('value').value) 
+    const online = parseInt(document.getElementById('value2').value) 
+    new Chart(piechart, {
+    type: 'doughnut',
+    data: {
+        labels: [
+            'COD',
+            'Online',
+            
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [cod, online],
+            backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+        }
+    });
+
+    const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+       datasets: [{
+    label: 'My First Dataset',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 205, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(201, 203, 207, 0.2)'
+    ],
+    borderColor: [
+      'rgb(255, 99, 132)',
+      'rgb(255, 159, 64)',
+      'rgb(255, 205, 86)',
+      'rgb(75, 192, 192)',
+      'rgb(54, 162, 235)',
+      'rgb(153, 102, 255)',
+      'rgb(201, 203, 207)'
+    ],
+    borderWidth: 1
+  }]
+}
+  
+  });
+</script>
 
 </html>
