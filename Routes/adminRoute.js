@@ -99,6 +99,7 @@ adminRoute.get('/report',order.report)
 // Update Order status
 adminRoute.post('/update-status',order.updateStatus)
 adminRoute.post('/delete-image',session.Logged,product.deleteSingle)
+adminRoute.post('/update-product-status',session.Logged,order.updateProductStatus)
 
 // Coupon
 adminRoute.get('/coupon',session.Logged,Coupon.viweCoupon)

@@ -53,6 +53,33 @@ const updateStatus = async (req,res) => {
     }
 }
 
+const updateProductStatus = async (req,res) => {
+    try {
+        const status = req.body.status
+        const orderId = req.body.orderId
+        const productId = req.body.productId
+        if(status == "Return Approved"){
+            const order = await Order.findOne({_id : orderId, "product.productId" : productId}).populate("product.productId")
+            const orderData = await Order.findById(orderId)
+            console.log(orderData.paymentMethod);
+            if(orderData.paymentMethod == "COD"){
+                const total = order.wallet 
+                await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+                await Order.findByIdAndUpdate(orderId, {$inc : {wallet : -total}})
+            }else {
+                const total = order.totalAmount + order.wallet 
+                await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
+                await Order.findByIdAndUpdate(orderId, {$inc : {wallet : -total}})
+            }
+        }
+        await Order.findOneAndUpdate({_id : orderId, "product.productId" : productId},{$set : {"product.$.status" : status}})
+        res.redirect('/admin/show-orders')
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
+    }
+}
+
 const orders = async (req,res) => {
     try {
         const value = req.query.value || "Default"
@@ -116,5 +143,6 @@ module.exports ={
     updateStatus,
     orders,
     salesReport,
-    report
+    report,
+    updateProductStatus
 }

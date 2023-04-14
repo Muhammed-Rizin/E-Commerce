@@ -135,6 +135,7 @@
                                 <p class="mb-0"><b>Quantity :<%= value.quantity %></b></p>
                                 <p class="mb-0"><b>Total Amount :<%= value.productId.price * value.quantity %></b></p>
                                 <p class="mb-0"> <%= value.productId.description %></p>
+                                <a href="/return?id=<%= id %>&prodId=<%= value.productId._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button>
                             </div>
                         
                     </div>

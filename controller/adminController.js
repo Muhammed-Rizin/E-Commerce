@@ -16,6 +16,16 @@ const loadHome = async (req,res) => {
             {$group : {_id : null, total : {$count : {}}}}])
 
         const saleChart = await Order.aggregate([{$group : {_id : "$paymentMethod", total : {$count : {}}}}])
+        const monthlySales = await Order.find()
+
+        const print = []
+        monthlySales.forEach((value,index) => {
+            print[index] = monthlySales[index].Date.toISOString().substring(0,10)
+        })
+
+        // const hi = await Order.aggregate([{$match : {Date : {$in : print}}}])
+        // const hi = await Order.find({Data : {$regex : "^"+{$in : print }}})
+        // console.log(print, hi);
 
         console.log(saleChart);
         res.render('admin/dashboard',{totalSale , totalUsers, totalProduct, saleChart, totalOrders})

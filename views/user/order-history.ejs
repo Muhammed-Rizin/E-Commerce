@@ -150,7 +150,7 @@
                             <td><a href="/view-order?id=<%= value._id %>"><button type="button" class="btn btn-secondary m-2">view</button></a></td> 
 
                             <% if(value.status == 'Delivered'){%>
-                                <td><a href="/return?id=<%= value._id %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return</button></a></td>  
+                                <!-- <td><a href="/return?id=<%= value._id %>&prodId=<%= value.product[0].productId %>"><button type="button" class="btn btn-warning m-2" onclick="return returnConforme(this)">Return<%= value.product.productId %></button></a></td>   -->
                             <%}else if(value.status == 'returned' || value.status == "Return Rejected" || value.status == "Return Approved" || value.status == 'cancelled' || value.status == "Return Pending" ){ %>
                             <%}else{ %>
                                     <td><a href="/cancel-order?id=<%= value._id %>"><button type="button" class="btn btn-danger m-2" onclick="return cancelConforme(this)">Cancel</button></a></td>         

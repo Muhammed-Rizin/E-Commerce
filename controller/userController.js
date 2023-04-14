@@ -898,7 +898,7 @@ const viewOrder = async (req,res) => {
     try {
         const orderId = req.query.id
         const orderData = await Order.findById(orderId).populate("product.productId")
-        res.render('user/view-orders',{user : req.session.user, data : orderData.product})
+        res.render('user/view-orders',{user : req.session.user, data : orderData.product, id : orderData._id})
 
     } catch (error) {
         console.log(error.message)
@@ -910,7 +910,9 @@ const viewOrder = async (req,res) => {
 const returnConforme = async (req,res) => {
     try {
         const id = req.query.id
-        res.render('user/return', {id})
+        const prodId = req.query.prodId
+        console.log(prodId);
+        res.render('user/return', {id,prodId})
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
@@ -918,9 +920,12 @@ const returnConforme = async (req,res) => {
 }
 const returnOrder = async (req,res) => {
     try {
+        const productId = new ObjectId(req.body.prodId) 
         const orderId = req.body.id
         const reason = req.body.reason
-        await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending', reason : reason}})
+        // await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending', reason : reason}})
+        const data = await Order.findOneAndUpdate({_id : orderId, "product.productId" : productId},
+                {$set : {"product.$.status" : 'Return Pending', "product.$.reason": reason}})
         res.redirect('/order-history')
     } catch (error) {
         console.log(error.message)
