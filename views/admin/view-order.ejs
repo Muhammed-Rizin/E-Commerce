@@ -171,27 +171,7 @@
                                             <% if(orderData.status == "Return Rejected" || orderData.status == "Return Approved" ||orderData.status == "cancelled" || orderData.status == "Delivered"){%>
                                                 <h6>Status : <%= orderData.status %></h6>
                                             <% }else if(orderData.status == "Return Pending"){ %>
-                                                <h6 class="mt-2"> Reason : <%= orderData.reason %></h6>
-                                                <div class="col-2 mt-3">
-                                                    <h6>Status :</h6>
-                                                </div>
-                                                <div class="col-6">
-                                                    <form action="/admin/update-status" method="post">
-                                                    <input type="hidden" name="orderId" value="<%= orderData._id %>">
-                                                        <input type="hidden" name="productId" value="">
-                                                        <select class="form-select mt-2" name="status" id="floatingSelect"
-                                                        aria-label="Floating label select example" style="background: transparent; border: none; size: 10px;">
-                                                        <option selected disabled value=""><%= orderData.status %></option>
-                                                        
-                                                                <option>Return Rejected</option>
-                                                                <option>Return Approved</option>
-                                                               
-                                                        </select>   
-                                                </div>
-                                                <div class="col-4"> 
-                                                    <button type="submit" class="btn btn-success m-2 ">Update</button>
-                                                </div>
-                                                </form>                                   
+                                                                                   
                                             <%} else { %>
                                                 <div class="col-2 mt-3">
                                                     <h6>Status :</h6>
@@ -220,15 +200,15 @@
                                             <% orderData.product.forEach((value,index) => {
                                                 if(value.status == "Return Pending"){%>
                                                     <h6> Reason : <%= value.reason %></h6>
+                                                    <h6>Product:<%= value.productId.name%></h6>
                                                 <div class="col-2 ">
-                                                    <h6>ProductId:<%= value._id %></h6>
                                                     <h6>Status:</h6>
                                                 </div>
                                                 <div class="col-6">
                                                     <form action="/admin/update-product-status" method="post">
                                                     <input type="hidden" name="orderId" value="<%= orderData._id %>">
                                                         <input type="hidden" name="productId" value="<%= value.productId._id %>">
-                                                        <select class="form-select mt-4" name="status" id="floatingSelect"
+                                                        <select class="form-select" name="status" id="floatingSelect"
                                                         aria-label="Floating label select example" style="background: transparent; border: none; size: 10px;">
                                                         <option selected disabled value=""><%= value.status %></option>
                                                         
@@ -238,7 +218,7 @@
                                                         </select>   
                                                 </div>
                                                 <div class="col-4"> 
-                                                    <button type="submit" class="btn btn-success mt-3 ">Update</button>
+                                                    <button type="submit" class="btn btn-success ">Update</button>
                                                 </div>
                                                 </form>    
                                                 <%}%>

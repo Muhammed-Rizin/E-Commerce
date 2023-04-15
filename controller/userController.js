@@ -898,7 +898,8 @@ const viewOrder = async (req,res) => {
     try {
         const orderId = req.query.id
         const orderData = await Order.findById(orderId).populate("product.productId")
-        res.render('user/view-orders',{user : req.session.user, data : orderData.product, id : orderData._id})
+        console.log(orderData.status);
+        res.render('user/view-orders',{user : req.session.user, data : orderData.product, id : orderData._id, status : orderData.status})
 
     } catch (error) {
         console.log(error.message)
@@ -923,8 +924,8 @@ const returnOrder = async (req,res) => {
         const productId = new ObjectId(req.body.prodId) 
         const orderId = req.body.id
         const reason = req.body.reason
-        // await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending', reason : reason}})
-        const data = await Order.findOneAndUpdate({_id : orderId, "product.productId" : productId},
+        await Order.findByIdAndUpdate(orderId,{$set : {status : 'Return Pending'}})
+        await Order.findOneAndUpdate({_id : orderId, "product.productId" : productId},
                 {$set : {"product.$.status" : 'Return Pending', "product.$.reason": reason}})
         res.redirect('/order-history')
     } catch (error) {

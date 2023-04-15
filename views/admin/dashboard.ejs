@@ -166,6 +166,18 @@
 
                             </div>
                             <canvas id="myChart"></canvas>
+                            <input type="hidden" id="input1" value="<%=yearChart[0]%>">
+                            <input type="hidden" id="input2" value="<%=yearChart[1]%>">
+                            <input type="hidden" id="input3" value="<%=yearChart[2]%>">
+                            <input type="hidden" id="input4" value="<%=yearChart[3]%>">
+                            <input type="hidden" id="input5" value="<%=yearChart[4]%>">
+                            <input type="hidden" id="input6" value="<%=yearChart[5]%>">
+                            <input type="hidden" id="input7" value="<%=yearChart[6]%>">
+                            <input type="hidden" id="input8" value="<%=yearChart[7]%>">
+                            <input type="hidden" id="input9" value="<%=yearChart[8]%>">
+                            <input type="hidden" id="input10" value="<%=yearChart[9]%>">
+                            <input type="hidden" id="input11" value="<%=yearChart[10]%>">
+                            <input type="hidden" id="input12" value="<%=yearChart[11]%>">
                         </div>
                     </div>
                 </div>
@@ -417,14 +429,26 @@
     });
 
     const ctx = document.getElementById('myChart');
+    const input1 = Number(document.getElementById('input1').value)
+    const input2 = Number(document.getElementById('input2').value)
+    const input3 = Number(document.getElementById('input3').value)
+    const input4 = Number(document.getElementById('input4').value)
+    const input5 = Number(document.getElementById('input5').value)
+    const input6 = Number(document.getElementById('input6').value)
+    const input7 = Number(document.getElementById('input7').value)
+    const input8 = Number(document.getElementById('input8').value)
+    const input9 = Number(document.getElementById('input9').value)
+    const input10 = Number(document.getElementById('input10').value)
+    const input11 = Number(document.getElementById('input11').value)
+    const input12 = Number(document.getElementById('input12').value)
 
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June','July','Aug','Sep','Oct','Nov','Dec'],
        datasets: [{
     label: 'Monthly Sales',
-    data: [65, 59, 80, 81, 56, 55, 40],
+    data: [input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,input11,input12],
     backgroundColor: [
       'rgba(255, 99, 132, 0.2)',
       'rgba(255, 159, 64, 0.2)',

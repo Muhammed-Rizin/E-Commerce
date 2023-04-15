@@ -7,7 +7,9 @@ const path = require('path')
 const showOrders = async (req,res) => {
     try {
         const data = await Order.find()
-        res.render('admin/orders', {data : data})
+        const status = await Order.find({"product.status" : {$exists : true}})
+        console.log(status);
+        res.render('admin/orders', {data , status})
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
@@ -73,6 +75,7 @@ const updateProductStatus = async (req,res) => {
             }
         }
         await Order.findOneAndUpdate({_id : orderId, "product.productId" : productId},{$set : {"product.$.status" : status}})
+        await Order.findByIdAndUpdate(orderId,{status : status})
         res.redirect('/admin/show-orders')
     } catch (error) {
         console.log(error.message)

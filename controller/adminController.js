@@ -2,6 +2,7 @@ const Admin = require('../model/adminModel')
 const Order = require('../model/order-model')
 const User = require('../model/userModel')
 const Product = require('../model/productModel')
+const moment = require('moment')
 
 // Home
 const loadHome = async (req,res) => {
@@ -16,19 +17,64 @@ const loadHome = async (req,res) => {
             {$group : {_id : null, total : {$count : {}}}}])
 
         const saleChart = await Order.aggregate([{$group : {_id : "$paymentMethod", total : {$count : {}}}}])
-        const monthlySales = await Order.find()
 
-        const print = []
-        monthlySales.forEach((value,index) => {
-            print[index] = monthlySales[index].Date.toISOString().substring(0,10)
-        })
+        // const monthlySales = await Order.find()
+
+        // const print = []
+        // monthlySales.forEach((value,index) => {
+        //     print[index] = monthlySales[index].Date.toISOString().substring(0,10)
+        // })
 
         // const hi = await Order.aggregate([{$match : {Date : {$in : print}}}])
         // const hi = await Order.find({Data : {$regex : "^"+{$in : print }}})
         // console.log(print, hi);
 
-        console.log(saleChart);
-        res.render('admin/dashboard',{totalSale , totalUsers, totalProduct, saleChart, totalOrders})
+        const start = moment().startOf('month')
+        const end = moment().endOf('month')
+        const date = new Date()
+        const year = date.getFullYear()
+        const currentYear = new Date(year,0,1)
+        
+        const salesByYear = await Order.aggregate([
+            {$match : {
+                createdAt :{$gte : currentYear},status:{$ne : "cancelled"}
+            }},
+            {$group : {
+                _id : {$dateToString : {format : "%m", date : "$createdAt"}},
+                total : {$sum : "$totalAmount"},
+                count : {$sum : 1}
+            }},
+            {$sort : {_id : 1}}
+        ])
+        console.log(salesByYear);
+        
+        let sales = []
+        for (i = 1; i< 13; i++){
+            let result = true
+            for(j = 0; j < salesByYear.length; j++){
+                result = false 
+                if(salesByYear[j]._id == i){
+                    sales.push(salesByYear[j])
+                    break;
+                }else {
+                    result = true
+                    
+                }
+            }
+            if(result){
+                sales.push({_id : i, total : 0, count : 0})
+            }
+            
+        }
+        console.log(sales);
+
+        let yearChart = []
+        for(i = 0; i < sales.length; i++){
+            yearChart.push(sales[i].total)
+        }
+        console.log(yearChart);
+
+        res.render('admin/dashboard',{totalSale , totalUsers, totalProduct, saleChart, totalOrders,yearChart})
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
