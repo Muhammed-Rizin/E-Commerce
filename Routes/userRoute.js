@@ -106,6 +106,8 @@ userRoute.get('/contact',userController.contact)
 // About
 userRoute.get('/about',userController.about)
 
+userRoute.get('/pro',userController.pro)
+
 // Search Sort Filter
 // userRoute.get('/shop',userController.shop)
 // userRoute.post('/shop',userController.shop)
