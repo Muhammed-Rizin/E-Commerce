@@ -127,12 +127,20 @@
                                 <h1>Orders</h1>
                                 <a href="/admin/report" target="_blank" >Download Pdf</a>
                             </div>
-                            <select name="price" id="price" onchange="location = '/admin/orders?value='+value"  style="background-color: transparent; border-radius: 30px; font-size: 15px; margin-bottom: 10px; padding: 5px; float: right;" >
-                                
-                                    <option value="default" selected> ALL</option>
-                                    <option value="COD"> COD </option>
-                                    <option value="Online"> Online </option>
-
+                            <select name="price" id="price" onchange="location = '/admin/show-orders?value='+value"  style="background-color: transparent; border-radius: 30px; font-size: 15px; margin-bottom: 10px; padding: 5px; float: right;" >
+                                    <option value="<%= value %>" selected> <%= value %></option>
+                                    <%if(value == 'Online'){%>
+                                        <option value="COD"> COD </option>
+                                    <%}else if(value == 'COD'){%>
+                                        <option value="Online"> Online </option>
+                                    <%}else {%>
+                                        <option value="COD"> COD </option>
+                                    <%}%>
+                                    <%if(value == 'Online' || value == 'COD'){%>
+                                        <option value="ALL"> ALL </option>
+                                    <%}else {%>
+                                        <option value="Online"> Online </option>
+                                    <%}%>
                             </select>
                             <table class="table" id="categorytable">
                                 <thead>

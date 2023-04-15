@@ -49,7 +49,6 @@ const insertBanner = async (req,res) => {
 const unlistBanner = async (req,res) => {
     try {
         const id = req.query.id
-        console.log(id)
         const data = await Banner.findById(id)
         if(data.status == true){
             await Banner.findByIdAndUpdate(id,{status : false})

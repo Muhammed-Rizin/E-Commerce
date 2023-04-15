@@ -6,10 +6,19 @@ const path = require('path')
 // Order
 const showOrders = async (req,res) => {
     try {
-        const data = await Order.find()
         const status = await Order.find({"product.status" : {$exists : true}})
-        console.log(status);
-        res.render('admin/orders', {data , status})
+        const value = req.query.value || 'ALL'
+        console.log(value);
+        if(value == "COD"){
+            const data = await Order.find({paymentMethod : "COD"})
+            res.render('admin/orders',{ data , message : 'COD' ,status,value })
+        }else if (value == "Online"){
+            const data = await Order.find({paymentMethod : "online"})
+            res.render('admin/orders',{ data , message : 'Online',status,value })
+        }else {
+            const data = await Order.find({})
+            res.render('admin/orders', {data,status,value })
+        }
     } catch (error) {
         console.log(error.message)
         res.render('user/505');
@@ -63,7 +72,6 @@ const updateProductStatus = async (req,res) => {
         if(status == "Return Approved"){
             const order = await Order.findOne({_id : orderId, "product.productId" : productId}).populate("product.productId")
             const orderData = await Order.findById(orderId)
-            console.log(orderData.paymentMethod);
             if(orderData.paymentMethod == "COD"){
                 const total = order.wallet 
                 await User.findByIdAndUpdate(order.user, {$inc : {wallet : total}})
@@ -85,8 +93,8 @@ const updateProductStatus = async (req,res) => {
 
 const orders = async (req,res) => {
     try {
-        const value = req.query.value || "Default"
-        
+        const value = req.query.value || "default"
+        console.log(value);
         if(value == "COD"){
             const data = await Order.find({paymentMethod : "COD"})
             res.render('admin/orders',{ data , message : 'COD' })
@@ -94,7 +102,7 @@ const orders = async (req,res) => {
             const data = await Order.find({paymentMethod : "online"})
             res.render('admin/orders',{ data , message : 'Online'})
         }else {
-            res.redirect('/admin/show-orders')
+            res.redirect('/admin/show-orders',{value})
         }
     } catch (error) {
         console.log(error.message)

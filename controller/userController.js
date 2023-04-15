@@ -366,18 +366,29 @@ const loadProducts = async (req, res) => {
         category === "All" ? category = [...cat] : category = req.query.category.split(',')
         req.query.value === "High" ? sort = -1 : sort = 1
 
-        console.log(Search);
         const productData = 
-        await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])
-        .sort({price : sort}).skip(skip).limit(limit)
-        console.log(category);
-        const productCount = (await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])).length
-        const totalPage = Math.ceil(productCount / limit)
+        await Product.aggregate([
+            {$match : {name : {$regex : '^'+Search, $options : 'i'},category : {$in : category}}},
+            {$sort : {price : sort}},
+            {$skip : skip},
+            {$limit : limit}
+        ])
+        // await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])
+        // .sort({price : sort}).skip(skip).limit(limit)
+
+        const productCount = await Product.aggregate([
+            {$match : {name : {$regex : '^'+Search, $options : 'i'},category : {$in : category}}},
+            {$sort : {price : sort}},
+            {$count : "Total"}
+        ])
+        const totalPage = Math.ceil(productCount[0].Total / limit)
 
         if(req.session.user){
-            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,page,Search,price, totalPage,cat : category})
+            res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,
+                page,Search,price, totalPage,cat : category})
         }else {
-            res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,page,Search,price, totalPage,cat : category})
+            res.render('user/product',{ message: "User Logged", data : productData, category : categoryData,
+                page,Search,price, totalPage,cat : category})
         }
     } catch (error) {
         console.log(error.message)
@@ -851,7 +862,7 @@ const viewOrder = async (req,res) => {
     try {
         const orderId = req.query.id
         const orderData = await Order.findById(orderId).populate("product.productId")
-        console.log(orderData.status);
+
         res.render('user/view-orders',{user : req.session.user, data : orderData.product, id : orderData._id, status : orderData.status})
 
     } catch (error) {
@@ -865,7 +876,7 @@ const returnConforme = async (req,res) => {
     try {
         const id = req.query.id
         const prodId = req.query.prodId
-        console.log(prodId);
+
         res.render('user/return', {id,prodId})
     } catch (error) {
         console.log(error.message)
@@ -1123,201 +1134,6 @@ const applyCoupon = async (req,res) => {
     }
 }
 
-const shop = async (req, res) => {
-    try {
-        const page = Number(req.query.page) || 1
-        const limit = 2
-        const skip = (page - 1) * limit
-
-        const price = req.query.value || "default"
-        const category = req.query.category || "All"
-        let Search = req.body.text || "All"
-        Search = Search.trim()
-
-
-        const postPrice = req.body.pri || "default"
-        const postCategory = req.body.cat || "All"
-        let SearchQuery = req.query.search || "All"
-        SearchQuery = SearchQuery.trim()
-
-        const product = (await Product.find({blocked : false})).length
-        const totalPage = Math.ceil(product/limit)
-  
-        const categoryData = await Category.find({blocked : false})
-        if(req.session.user){
-            if(price == "zero-to-fifty"){
-                if(category != "All"){
-                    if(Search != "All"){
-                        const productData = 
-                        await Product.find({blocked : false, price : {$lte : 50},category : category, 
-                            name : {$regex : '^'+SearchQuery, $options : 'i'}})
-                            .skip(skip).limit(limit)
-
-                        res.render('user/product',
-                        { user: req.session.user, data : productData, category : categoryData, 
-                            totalPage, price, Cat : category,page,Search,price})
-                    }else{
-                        const productData = 
-                        await Product.find({blocked : false, price : {$lte : 50},category : category})
-                            .skip(skip).limit(limit)
-
-                        res.render('user/product',
-                        { user: req.session.user, data : productData, category : categoryData,
-                            totalPage, price, Cat : category,page,Search})
-                    }
-                }else{
-                    if(Search != "All"){
-                        const productData = await Product.find({blocked : false, price : {$lte : 50},
-                            name : {$regex : '^'+SearchQuery, $options : 'i'}})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',
-                        { user: req.session.user, data : productData, category : categoryData,
-                            totalPage, price, Cat : category,page,Search})
-                    }else {
-                        const productData = 
-                        await Product.find({blocked : false, price : {$lte : 50}})
-                            .skip(skip).limit(limit)
-
-                        res.render('user/product',
-                        { user: req.session.user, data : productData, cat : categoryData,
-                            totalPage, price, Cat : category,page,Search})
-                    }
-                }
-            }else if(price == "fifty-to-hundred"){
-                if(category != "All"){
-                    if(Search != "All"){
-                        const productData = 
-                        await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}],
-                            name : {$regex : '^'+SearchQuery, $options : 'i'},category : category})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }else {
-                        const productData = 
-                        await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}],
-                            category : category})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }
-                }else{
-                    if(Search != "All"){
-                        const productData = 
-                        await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}],
-                            name : {$regex : '^'+SearchQuery, $options : 'i'}})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }else {
-                        const productData = 
-                        await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price,Cat : category,page,Search, totalPage})
-                    }
-                }
-            }else if(price == "hundred-to-null"){
-                if(category != "All"){
-                    if(Search != "All"){
-                        const productData = 
-                        await Product.find({blocked : false, price : {$gte : 100},
-                            name : {$regex : '^'+SearchQuery, $options : 'i'},category : category})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }else {
-                        const productData = 
-                        await Product.find({blocked : false, price : {$gte : 100},category : category})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }
-                }else {
-                    if(Search != "All"){
-                        const productData = 
-                        await Product.find({blocked : false, price : {$gte : 100},
-                            name : {$regex : '^'+SearchQuery, $options : 'i'}})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }else {
-                        const productData = 
-                        await Product.find({blocked : false, price : {$gte : 100}})
-                            .skip(skip).limit(limit)
-                        res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, 
-                            price, Cat : category,page,Search, totalPage})
-                    }
-                }
-            }else if(category != "All"){
-                
-                const productData = await Product.find({category : category},{blocked : false}).skip(skip).limit(limit)
-                res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else if(Search != "All"){
-                const productData = await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false}).skip(skip).limit(limit)
-                res.render('user/product',{ user: req.session.user, data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else {
-                const productData = await Product.find({blocked : false}).skip(skip).limit(limit)
-                const categoryData = await Category.find({blocked : false})
-                res.render('user/product', { user: req.session.user, data : productData, category : categoryData, totalPage, price, Cat : category,page,Search})
-            }
-        }else {
-            if(price == "zero-to-fifty"){
-                const productData = await Product.find({blocked : false, price : {$lte : 50}}).skip(skip).limit(limit)
-                res.render('user/product',{ message: "User Logged", data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else if(price == "fifty-to-hundred"){
-                const productData = await Product.find({blocked : false, $and : [{price : {$gt : 50}},{price : {$lte : 100}}]}).skip(skip).limit(limit)
-                res.render('user/product',{ message: "User Logged", data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else if(price == "hundred-to-null"){
-                const productData = await Product.find({blocked : false, price : {$gte : 100}}).skip(skip).limit(limit)
-                res.render('user/product',{ message: "User Logged", data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else if(category != "All"){
-                const productData = await Product.find({category : category},{blocked : false}).skip(skip).limit(limit)
-                res.render('user/product',{ message: "User Logged", data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else if(Search != "All"){
-                const productData = await Product.find({name : {$regex : '^'+Search, $options : 'i'},blocked : false}).skip(skip).limit(limit)
-                res.render('user/product',{ message: "User Logged", data : productData, category : categoryData, price, Cat : category,page,Search, totalPage})
-            }else {
-                const productData = await Product.find({blocked : false}).skip(skip).limit(limit)
-                const categoryData = await Category.find({blocked : false})
-                res.render('user/product', { user: req.session.user, data : productData, category : categoryData, totalPage, page, price, Cat : category,page,Search, totalPage})
-            }
-        }
-    } catch (error) {
-        console.log(error.message)
-        res.render('user/505')
-    }
-}
-
-const pro = async (req, res) => {
-    try {
-        const page = Number(req.query.page) || 1
-        const limit = 3
-        const skip = (page - 1) * limit
-
-        let price = req.query.value 
-        let category = req.query.category || "All"
-        let Search = req.query.search || ""
-        Search = Search.trim()
-
-        const categoryData = await Category.find({blocked : false})
-        
-        console.log(category, price);
-        category === "All" ? category = [...categoryData] : category = req.query.category.split(',')
-        req.query.value === "High" ? price = -1 : price = 1
-
-        const productData = await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])
-        .sort({price : price}).skip(skip).limit(limit)
-        console.log(category,productData);
-        if(req.session.user){
-            
-        }else {
-            
-        }
-    } catch (error) {
-        console.log(error.message)
-        res.render('user/505')
-    }
-}
 
 module.exports = {
     loadHome,
@@ -1358,6 +1174,5 @@ module.exports = {
     applyCoupon,
     verifyPayment,
     orderHistory,
-    returnConforme,
-    pro
+    returnConforme
 }

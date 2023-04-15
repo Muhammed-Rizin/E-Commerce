@@ -18,17 +18,6 @@ const loadHome = async (req,res) => {
 
         const saleChart = await Order.aggregate([{$group : {_id : "$paymentMethod", total : {$count : {}}}}])
 
-        // const monthlySales = await Order.find()
-
-        // const print = []
-        // monthlySales.forEach((value,index) => {
-        //     print[index] = monthlySales[index].Date.toISOString().substring(0,10)
-        // })
-
-        // const hi = await Order.aggregate([{$match : {Date : {$in : print}}}])
-        // const hi = await Order.find({Data : {$regex : "^"+{$in : print }}})
-        // console.log(print, hi);
-
         const start = moment().startOf('month')
         const end = moment().endOf('month')
         const date = new Date()
@@ -46,7 +35,6 @@ const loadHome = async (req,res) => {
             }},
             {$sort : {_id : 1}}
         ])
-        console.log(salesByYear);
         
         let sales = []
         for (i = 1; i< 13; i++){
@@ -66,13 +54,11 @@ const loadHome = async (req,res) => {
             }
             
         }
-        console.log(sales);
-
+       
         let yearChart = []
         for(i = 0; i < sales.length; i++){
             yearChart.push(sales[i].total)
         }
-        console.log(yearChart);
 
         res.render('admin/dashboard',{totalSale , totalUsers, totalProduct, saleChart, totalOrders,yearChart})
     } catch (error) {
