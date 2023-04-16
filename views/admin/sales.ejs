@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>HUFIKO-Admin-user</title>
+    <title>HUFIKO-Admin-orders</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -77,10 +77,10 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="/admin/dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="/admin/show-user" class="nav-item nav-link active"><i class="fa fa-user me-2"></i>User</a>
+                    <a href="/admin/show-user" class="nav-item nav-link"><i class="fa fa-user me-2"></i>User</a>
                     <a href="/admin/products" class="nav-item nav-link "><i class="fa fa-laptop me-2"></i>Products</a>
                     <a href="/admin/category" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Category</a>
-                    <a href="/admin/show-orders" class="nav-item nav-link"><i class="fa fa-id-card-alt me-2"></i>Orders</a>
+                    <a href="/admin/show-orders" class="nav-item nav-link active"><i class="fa fa-id-card-alt me-2"></i>Orders</a>
                     <a href="/admin/coupon" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Coupon</a>
                     <a href="/admin/banner" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Banner</a>
 
@@ -121,40 +121,58 @@
 
             <!-- Table Start -->
             <div class="container-fluid pt-5 px-4">
-                <h1>Users</h1>
+               
                 <div class="row pt-4 g-4">
                     <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
+                            <div class="test d-flex justify-content-between align-items-center">
+                                <h1>Sales</h1>
+                                <a href="/admin/report" target="_blank" >Download Pdf</a>
+                            </div>
+                            <select name="price" id="price" onchange="location = '/admin/show-orders?value='+value"  style="background-color: transparent; border-radius: 30px; font-size: 15px; margin-bottom: 10px; padding: 5px; float: right;" >
+                                    <option value="<%= value %>" selected> <%= value %></option>
+                                        <%if(value == 'Online'){%>
+                                            <option value="COD"> COD </option>
+                                        <%}else if(value == 'COD'){%>
+                                            <option value="Online"> Online </option>
+                                        <%}else {%>
+                                            <option value="COD"> COD </option>
+                                        <%}%>
+                                    <%if(value == 'Online' || value == 'COD'){%>
+                                        <option value="ALL"> ALL </option>
+                                    <%}else {%>
+                                        <option value="Online"> Online </option>
+                                    <%}%>
+                            </select>
                             <table class="table" id="categorytable">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Mobile</th>
-                                        <th scope="col">Email verified</th>
-                                        <th scope="col">Mobile Verified</th>
-                                        <th scope="col">Block</th>
+                                        <th scope="col">Order ID</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Total Amount</th>
+                                        <th scope="col">Method</th>
+                                        <th scope="col">status</th>
+                                        <th scope="col">View</th>
+                                        
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    <% data.forEach((value,index)=>{ %>
+                                    <% data.reverse().forEach((value,index)=>{ %>
                                         <tr>
                                             <td><%= index+1 %></td>
-                                            <td><%= value.user_name %></td>
-                                            <td><%= value.email %></td>
-                                            <td><%= value.mobile_number %></td>
-                                            <td><%= value.emailVerified %></td>
-                                            <td><%= value.mobileVerfied %></td>
-                                            <% if(value.blocked==false){ %>
-                                                <td><a href="/admin/block-user?id=<%= value._id %>"><button class="btn btn-danger" onclick="return hideconfirm(this)">Block</button></a></td>
-                                        </tr>
-
-                                            <% }else{ %>
-                                            <td><a href="/admin/block-user?id=<%= value._id %>"><button class="btn btn-success" onclick="return showconfirm(this)">Un block</button></a></td>
-                                            </tr>
-                                            <% } %>
+                                            <td><%- value._id %></td>
+                                            <td><%= value.Date.toISOString().substring(0,10) %></td>
+                                            
+                                            <td><%= value.totalAmount %></td>
+                                            <td><%= value.paymentMethod %></td>
+                                            <td><%= value.status %> 
+                                                
+                                            </td>
+                                            
+                                            <td><a href="/admin/view-order?id=<%= value._id %>"><button class="btn btn-primary">view</button></a></td>
+                                            
                                     <% })%>
                                 </tbody>
 
@@ -178,10 +196,10 @@
         <script src="/admin/javaScript/main.js"></script>
     <script>
         function showconfirm(node) {
-            return confirm("Un Block this User?")
+            return confirm("Show this Product?")
         }
         function hideconfirm(node) {
-            return confirm("Block this User?")
+            return confirm("Hide this Product?")
         }
     </script>
 </body>

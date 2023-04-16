@@ -91,26 +91,18 @@ const updateProductStatus = async (req,res) => {
     }
 }
 
-const orders = async (req,res) => {
-    try {
-        const value = req.query.value || "default"
-        console.log(value);
-        if(value == "COD"){
-            const data = await Order.find({paymentMethod : "COD"})
-            res.render('admin/orders',{ data , message : 'COD' })
-        }else if (value == "Online"){
-            const data = await Order.find({paymentMethod : "online"})
-            res.render('admin/orders',{ data , message : 'Online'})
-        }else {
-            res.redirect('/admin/show-orders',{value})
-        }
-    } catch (error) {
-        console.log(error.message)
-        res.render('user/505');
-    }
-}
+
 
 // Sales Report
+const sales = async (req,res) => {
+    try {
+        const value = req.query.value || 'ALL'
+        const data = await Order.find({status : {$ne : "cancelled"}})
+        res.render('admin/sales', {data , value})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 const salesReport = async (req,res) => {
     try {
         const data = await Order.find({status : {$ne : "cancelled"}})
@@ -152,8 +144,8 @@ module.exports ={
     showOrders,
     viewOrder,
     updateStatus,
-    orders,
     salesReport,
     report,
-    updateProductStatus
+    updateProductStatus,
+    sales
 }

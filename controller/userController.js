@@ -376,12 +376,9 @@ const loadProducts = async (req, res) => {
         // await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])
         // .sort({price : sort}).skip(skip).limit(limit)
 
-        const productCount = await Product.aggregate([
-            {$match : {name : {$regex : '^'+Search, $options : 'i'},category : {$in : category}}},
-            {$sort : {price : sort}},
-            {$count : "Total"}
-        ])
-        const totalPage = Math.ceil(productCount[0].Total / limit)
+        const productCount = (await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])).length
+        
+        const totalPage = Math.ceil(productCount / limit)
 
         if(req.session.user){
             res.render('user/product',{ user: req.session.user, data : productData, category : categoryData,

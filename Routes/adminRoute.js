@@ -87,12 +87,12 @@ adminRoute.get('/block-user',session.Logged,user.blockUser)
 
 // Order 
 adminRoute.get('/show-orders',session.Logged,order.showOrders)
-// adminRoute.get('/orders',session.Logged,order.orders)
 
 // View Order
 adminRoute.get('/view-order',session.Logged,order.viewOrder)
 
 // Sales Report
+adminRoute.get('/sales',session.Logged,order.sales)
 adminRoute.get('/sales-report',order.salesReport)
 adminRoute.get('/report',order.report)
 
