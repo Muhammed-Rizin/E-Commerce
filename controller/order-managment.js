@@ -8,7 +8,6 @@ const showOrders = async (req,res) => {
     try {
         const status = await Order.find({"product.status" : {$exists : true}})
         const value = req.query.value || 'ALL'
-        console.log(value);
         if(value == "COD"){
             const data = await Order.find({paymentMethod : "COD"})
             res.render('admin/orders',{ data , message : 'COD' ,status,value })
@@ -96,17 +95,35 @@ const updateProductStatus = async (req,res) => {
 // Sales Report
 const sales = async (req,res) => {
     try {
+        const status = await Order.find({"product.status" : {$exists : true}})
         const value = req.query.value || 'ALL'
-        const data = await Order.find({status : {$ne : "cancelled"}})
-        res.render('admin/sales', {data , value})
+        if(value == "COD"){
+            const data = await Order.find({paymentMethod : "COD"})
+            res.render('admin/sales',{ data , message : 'COD' ,status,value })
+        }else if (value == "Online"){
+            const data = await Order.find({paymentMethod : "online"})
+            res.render('admin/sales',{ data , message : 'Online',status,value })
+        }else {
+            const data = await Order.find({})
+            res.render('admin/sales', {data,status,value })
+        }
     } catch (error) {
         console.log(error.message);
     }
 }
 const salesReport = async (req,res) => {
     try {
-        const data = await Order.find({status : {$ne : "cancelled"}})
-        res.render('admin/sales-report', {data : data})
+        const value = req.query.value || 'ALL'
+        if(value == "COD"){
+            const data = await Order.find({paymentMethod : "COD"})
+            res.render('admin/sales-report',{ data })
+        }else if (value == "Online"){
+            const data = await Order.find({paymentMethod : "online"})
+            res.render('admin/sales-report',{ data })
+        }else {
+            const data = await Order.find({})
+            res.render('admin/sales-report', {data})
+        }
     } catch (error) {
         console.log(error.message);
     }
@@ -114,9 +131,10 @@ const salesReport = async (req,res) => {
 
 const report = async (req,res) => {
     try {
+        const value = req.query.value
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
-        await page.goto('http://localhost:3000/admin/sales-report' , {
+        await page.goto(`http://localhost:3000/admin/sales-report?value=${value}` , {
         waitUntil:"networkidle2"
         })
         await page.setViewport({width: 1680 , height: 1050})
