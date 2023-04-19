@@ -30,7 +30,7 @@ const loadHome = async (req,res) => {
             }},
             {$group : {
                 _id : {$dateToString : {format : "%m", date : "$createdAt"}},
-                total : {$sum : "$totalAmount"},
+                total : {$sum : "$amount"},
                 count : {$sum : 1}
             }},
             {$sort : {_id : 1}}
