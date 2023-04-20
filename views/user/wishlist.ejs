@@ -56,15 +56,35 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links">
-                <a href="#">Sign in</a>
-                <a href="#">FAQs</a>
+                <div class="row">
+                    <% if(typeof message !=='undefined' ){%>
+                        <div class="col-lg-6 col-md-5">
+                            <div class="header__top__right">
+                                <div class="header__top__links">
+                                    <a href="/login">Sign in</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    <% } %>
+                    <% if(typeof user !=='undefined' ){%>
+                        <div class="col-lg-6 col-md-5">
+                            <div class="header__top__right">
+                                <div class="header__top__links">
+                                    <a href="/profile"> <%=user %> </a>
+                                    <a href="/logout">Log-Out</a>
+                                </div>                                
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
             </div>
+            
         </div>
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="/user/assets/img/icon/search.png" alt=""></a>
-            <a href="#"><img src="/user/assets/img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="/user/assets/img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <a href="/wish-list"><img src="/user/assets/img/icon/heart.png" alt=""></a>
+            <a href="/cart"><img src="/user/assets/img/icon/cart.png" alt=""> </a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -188,10 +208,9 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <button onclick="addToCart('<%= value.productId._id %>') " class="btn btn-dark">+ Add To Cart</button>
-                                            </td>
+                                                <button onclick="addToCart('<%= value.productId._id %>') " class="btn btn-dark">To Cart</button></td>
                                             
-                                            <td class="cart__close">
+                                            <td class="cart__close ">
                                                 <a onclick="deleteitem('<%= value.productId._id %>')">X</a></td>
                                                  
                                         </tr>
@@ -213,7 +232,7 @@
     <!-- Shopping Cart Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer">
+    <!-- <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
@@ -262,7 +281,7 @@
             </div>
             
         </div>
-    </footer>
+    </footer> -->
     <!-- Footer Section End -->
 
     <!-- Search Begin -->
