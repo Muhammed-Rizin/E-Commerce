@@ -1,5 +1,5 @@
 const Order = require('../model/order-model')
-const User = require('../model/userModel')
+const User = require('../model/user-model')
 const puppeteer = require('puppeteer')
 const path = require('path')
 

@@ -1,7 +1,7 @@
-const Admin = require('../model/adminModel')
+const Admin = require('../model/admin-model')
 const Order = require('../model/order-model')
-const User = require('../model/userModel')
-const Product = require('../model/productModel')
+const User = require('../model/user-model')
+const Product = require('../model/product-model')
 const moment = require('moment')
 
 // Home

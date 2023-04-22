@@ -1,7 +1,7 @@
 const express = require('express')
 const userRoute = express()
-const userController = require('../controller/userController')
-const session = require('../middleware/userSession')
+const userController = require('../controller/user-controller')
+const session = require('../middleware/user-session')
 
 // Home
 userRoute.get('/',userController.loadHome)

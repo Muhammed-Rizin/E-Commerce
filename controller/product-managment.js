@@ -1,5 +1,5 @@
-const Product = require('../model/productModel')
-const Category = require('../model/categoryModel')
+const Product = require('../model/product-model')
+const Category = require('../model/category-model')
 
 const { ObjectId } = require("mongodb")
 

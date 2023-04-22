@@ -1,4 +1,4 @@
-const User = require('../model/userModel')
+const User = require('../model/user-model')
 
 // Show User
 const showUser = async (req,res) => {

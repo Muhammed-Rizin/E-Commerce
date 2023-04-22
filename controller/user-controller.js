@@ -1,4 +1,4 @@
-const User = require('../model/userModel')
+const User = require('../model/user-model')
 
 const bcrypt = require('bcrypt');
 const { Session } = require('express-session');
@@ -21,8 +21,8 @@ const authToken = process.env.authToken
 const services = process.env.services
 const client = require('twilio')(accountSid, authToken);
 
-const Product = require('../model/productModel')
-const Category = require('../model/categoryModel')
+const Product = require('../model/product-model')
+const Category = require('../model/category-model')
 const Cart = require('../model/cart-model')
 const Order = require('../model/order-model');
 const WishList = require('../model/wishlist-model')
@@ -90,7 +90,7 @@ const verifyEmail = async (req,res) => {
 const loadHome = async (req, res) => {
     try {
         const productData = await Product.find({})
-        const banner = await Banner.find({status : true})
+        const banner = await Banner.find({status : true}).sort({order : 1})
         if (req.session.user) {
             res.render('user/home', { user: req.session.user, data : productData , banner})
         } else {

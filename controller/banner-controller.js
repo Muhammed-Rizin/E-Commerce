@@ -62,9 +62,39 @@ const unlistBanner = async (req,res) => {
     }
 }
 
+// Edit Banner
+const editBanner = async (req,res) => {
+    try {
+        const id = req.query.id
+        const data = await Banner.findById(id)
+        res.render('admin/edit-banner',{data})
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
+    }
+}
+
+// Update Banner
+const updateBanner = async  (req,res) => {
+    try {
+        const id = req.body.id
+        const heading = req.body.heading
+        const description = req.body.description
+        const Order = req.body.order
+        
+        await Banner.findByIdAndUpdate(id,{heading : heading,description : description,order : Order})
+        res.redirect('/admin/banner')
+    } catch (error) {
+        console.log(error.message)
+        res.render('user/505');
+    }
+}
+
 module.exports = {
     viewBanner,
     addBanner,
     insertBanner,
-    unlistBanner
+    unlistBanner,
+    editBanner,
+    updateBanner
 }

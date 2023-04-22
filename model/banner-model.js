@@ -16,6 +16,9 @@ const bannerSchema = mongoose.Schema({
     status : {
         type : Boolean,
         default : false
+    },order : {
+        type : Number,
+        required : true
     }
 })
 

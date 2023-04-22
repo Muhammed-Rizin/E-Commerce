@@ -2,13 +2,13 @@ const express = require('express')
 const adminRoute = express()
 const path = require('path')
 const multer = require('multer')
-const adminController = require('../controller/adminController')
-const category = require('../controller/categoryManagment')
-const session = require('../middleware/adminSession')
-const product = require('../controller/productManagment')
+const adminController = require('../controller/admin-controller')
+const category = require('../controller/category-managment')
+const session = require('../middleware/admin-session')
+const product = require('../controller/product-managment')
 const user = require('../controller/user-managment')
 const order = require('../controller/order-managment')
-const Coupon = require('../controller/coupon-Managment')
+const Coupon = require('../controller/coupon-managment')
 const Banner = require('../controller/banner-controller')
 
 
@@ -124,5 +124,10 @@ adminRoute.post('/add-banner',upload.single('image'),Banner.insertBanner)
 
 // Unlist banner
 adminRoute.get('/show-banner',session.Logged,Banner.unlistBanner)
+
+//Edit Banner 
+adminRoute.get('/edit-banner',session.Logged,Banner.editBanner)
+adminRoute.post('/edit-banner',Banner.updateBanner)
+
 
 module.exports =adminRoute
