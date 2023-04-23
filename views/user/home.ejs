@@ -262,7 +262,7 @@
                         </div>
                         <div class="product__item__text">
                             <h6><%= value.name %></h6>
-                            <a onclick="addToCart('<%= value._id %>'),popupcart()" class="add-cart">+ Add To Cart</a>
+                            <a onclick="addToCart('<%= value._id %>')" class="add-cart">+ Add To Cart</a>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -369,7 +369,7 @@
                   },
                 }).done((data) => {
                   if (data.success) {
-                    window.location.reload();
+                    swal("Added!", "Item has been added to Cart!", "success");
                   }else if(data.outofstock){
 			        swal("Oops!", "Out of stock", "error")
 		          }else{
@@ -377,10 +377,6 @@
                   }
                 });
               }
-
-            function popupcart() {
-                swal("Added!", "Item has been added to Cart!", "success");
-            }
             function addToWishlist(id){
             $.ajax({
                 url : '/add-to-wishlist',

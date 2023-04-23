@@ -468,12 +468,14 @@ const addToCart = async (req,res) => {
                         res.json({outofstock:true})
                     }else {
                         await Cart.findOneAndUpdate({user : userId, "product.productId" : productId},{$inc : {"product.$.quantity" : 1}})
+                        res.json({success:true})
                     }
                 }else{
                     if(productData.stock <= 0 ){
                         res.json({outofstock:true})
                     }else {
                         await Cart.findOneAndUpdate({user : userId},{$push : {product:{productId : productId, price : productData.price}}})
+                        res.json({success:true})
                     }
                 }
                 
@@ -485,10 +487,8 @@ const addToCart = async (req,res) => {
                         user : userId,
                         product:[{productId : productId, price : productData.price}]
                     })
-                    const result = await data.save()
-                    if(result){
-                        res.json({success:true})
-                    }
+                    await data.save()
+                    res.json({success:true})
                 }
             }
         }else{
