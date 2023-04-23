@@ -8,7 +8,7 @@ const session = require('../middleware/admin-session')
 const product = require('../controller/product-managment')
 const user = require('../controller/user-managment')
 const order = require('../controller/order-managment')
-const Coupon = require('../controller/coupon-managment')
+const Coupon = require('../controller/coupon-manage')
 const Banner = require('../controller/banner-controller')
 
 
