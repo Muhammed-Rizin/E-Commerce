@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-// mongoose.connect("mongodb+srv://rizin7427:FkblicC14r6HfoLx@cluster0.izdn1ub.mongodb.net/test").then(()=>console.log("Mongodb Server Connected")).catch(()=>console.log("Server Not Connected "))
-mongoose.connect("mongodb://127.0.0.1:27017/E-Commerce").then(()=>console.log("Mongodb Server Connected")).catch(()=>console.log("Server Not Connected "))
+mongoose.connect("mongodb+srv://rizin7427:FkblicC14r6HfoLx@cluster0.izdn1ub.mongodb.net/hufiko").then(()=>console.log("Mongodb Server Connected")).catch(()=>console.log("Server Not Connected "))
+// mongoose.connect("mongodb://127.0.0.1:27017/E-Commerce").then(()=>console.log("Mongodb Server Connected")).catch(()=>console.log("Server Not Connected "))
 const Express = require('express')
 const app = Express()
 const path = require('path')
