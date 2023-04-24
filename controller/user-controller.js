@@ -60,7 +60,7 @@ const sendVerifyMail = async (name,email)=>{
             from: process.env.email,
             to: email,
             subject: 'For Email Verification',
-            html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/verify?name='+name+'"> Verify <a> your mail </p>'
+            html: '<p> Hello '+name+',please click here <a href="https://hufiko.shop/verify?name='+name+'"> Verify <a> your mail </p>'
         }
     
         transporter.sendMail(mailOption,(error,info)=>{
@@ -298,7 +298,7 @@ const sendResetPasswordMail = async (name,email,token)=>{
             from: process.env.email,
             to: email,
             subject: 'For Change Password',
-            html: '<p> Hello '+name+',please click here <a href="http://localhost:3000/resetpass?token='+token+'"> Reset <a> your Password </p>'
+            html: '<p> Hello '+name+',please click here <a href="https://hufiko.shop/resetpass?token='+token+'"> Reset <a> your Password </p>'
         }
     
         transporter.sendMail(mailOption,(error,info)=>{

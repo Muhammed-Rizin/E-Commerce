@@ -134,7 +134,7 @@ const report = async (req,res) => {
         const value = req.query.value
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
-        await page.goto(`http://localhost:3000/admin/sales-report?value=${value}` , {
+        await page.goto(`https://hufiko.shop/admin/sales-report?value=${value}` , {
         waitUntil:"networkidle2"
         })
         await page.setViewport({width: 1680 , height: 1050})
