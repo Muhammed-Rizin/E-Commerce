@@ -109,7 +109,7 @@ const sales = async (req,res) => {
                     }
                 }
             ])
-            res.render('admin/sales', {data,status,start,end })
+            res.render('admin/sales', {data,status,start : req.query.start,end :req.query.end })
         }else {
             const data = await Order.find({})
             res.render('admin/sales', {data,status,start,end })
