@@ -96,34 +96,72 @@ const updateProductStatus = async (req,res) => {
 const sales = async (req,res) => {
     try {
         const status = await Order.find({"product.status" : {$exists : true}})
-        const value = req.query.value || 'ALL'
-        if(value == "COD"){
-            const data = await Order.find({paymentMethod : "COD"})
-            res.render('admin/sales',{ data , message : 'COD' ,status,value })
-        }else if (value == "Online"){
-            const data = await Order.find({paymentMethod : "online"})
-            res.render('admin/sales',{ data , message : 'Online',status,value })
+        let start = new Date(req.query.start )
+        req.query.start ? start = new Date(req.query.start) : start = "ALL"
+        let end = new Date(req.query.end)
+        req.query.end ? end = new Date(req.query.end) : end = "ALL"
+
+        if(start != "ALL" && end != "ALL"){
+            const data = await Order.aggregate([
+                {
+                    $match : {
+                        $and : [{Date : {$gte : start}},{Date : {$lte : end}}]
+                    }
+                }
+            ])
+            res.render('admin/sales', {data,status,start,end })
         }else {
             const data = await Order.find({})
-            res.render('admin/sales', {data,status,value })
+            res.render('admin/sales', {data,status,start,end })
         }
+
+        // const value = req.query.value || 'ALL'
+        // if(value == "COD"){
+        //     const data = await Order.find({paymentMethod : "COD"})
+        //     res.render('admin/sales',{ data , message : 'COD' ,status,value })
+        // }else if (value == "Online"){
+        //     const data = await Order.find({paymentMethod : "online"})
+        //     res.render('admin/sales',{ data , message : 'Online',status,value })
+        // }else {
+        //     const data = await Order.find({})
+        //     res.render('admin/sales', {data,status,value })
+        // }
     } catch (error) {
         console.log(error.message);
     }
 }
 const salesReport = async (req,res) => {
     try {
-        const value = req.query.value || 'ALL'
-        if(value == "COD"){
-            const data = await Order.find({paymentMethod : "COD"})
-            res.render('admin/sales-report',{ data })
-        }else if (value == "Online"){
-            const data = await Order.find({paymentMethod : "online"})
-            res.render('admin/sales-report',{ data })
+        const status = await Order.find({"product.status" : {$exists : true}})
+        let start = new Date(req.query.start )
+        req.query.start ? start = new Date(req.query.start) : start = "ALL"
+        let end = new Date(req.query.end)
+        req.query.end ? end = new Date(req.query.end) : end = "ALL"
+
+        if(start != "ALL" && end != "ALL"){
+            const data = await Order.aggregate([
+                {
+                    $match : {
+                        $and : [{Date : {$gte : start}},{Date : {$lte : end}}]
+                    }
+                }
+            ])
+            res.render('admin/sales-report', {data})
         }else {
             const data = await Order.find({})
-            res.render('admin/sales-report', {data})
+            res.render('admin/sales-report', {data,status,start,end })
         }
+        // const value = req.query.value || 'ALL'
+        // if(value == "COD"){
+        //     const data = await Order.find({paymentMethod : "COD"})
+        //     res.render('admin/sales-report',{ data })
+        // }else if (value == "Online"){
+        //     const data = await Order.find({paymentMethod : "online"})
+        //     res.render('admin/sales-report',{ data })
+        // }else {
+        //     const data = await Order.find({})
+        //     res.render('admin/sales-report', {data})
+        // }
     } catch (error) {
         console.log(error.message);
     }

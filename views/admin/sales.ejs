@@ -130,23 +130,26 @@
                         <div class="bg-light rounded h-100 p-4">
                             <div class="test d-flex justify-content-between align-items-center">
                                 <h1>Sales</h1>
-                                <a href="/admin/report?value=<%= value %>" target="_blank" >Download Pdf</a>
+                                <a href="/admin/report?start=<%= start %>&end=<%= end %>" target="_blank" >Download Pdf</a>
                             </div>
-                            <select name="price" id="price" onchange="location = '/admin/sales?value='+value"  style="background-color: transparent; border-radius: 30px; font-size: 15px; margin-bottom: 10px; padding: 5px; float: right;" >
-                                    <option value="<%= value %>" selected> <%= value %></option>
-                                        <%if(value == 'Online'){%>
-                                            <option value="COD"> COD </option>
-                                        <%}else if(value == 'COD'){%>
-                                            <option value="Online"> Online </option>
-                                        <%}else {%>
-                                            <option value="COD"> COD </option>
-                                        <%}%>
-                                    <%if(value == 'Online' || value == 'COD'){%>
-                                        <option value="ALL"> ALL </option>
-                                    <%}else {%>
-                                        <option value="Online"> Online </option>
-                                    <%}%>
-                            </select>
+                            <div>
+                                <form action="/admin/sales">
+                                    <div class="row mb-4">
+                                        <div class="col-2">
+                                            <label for="Start" class="ms-1">Start</label>
+                                            <input type="date" id="start-date" name="start" class="form-control" >
+                                        </div>
+                                        <div class="col-2">
+                                            <label for="Start" class="ms-1">End</label>
+                                            <input type="date" id="end-date" name="end" class="form-control">
+    
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-secondary mt-4">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <table class="table" id="categorytable">
                                 <thead>
                                     <tr>
