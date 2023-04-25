@@ -134,8 +134,10 @@ const salesReport = async (req,res) => {
     try {
         const status = await Order.find({"product.status" : {$exists : true}})
         let start = new Date(req.query.start )
-        req.query.start ? start = new Date(req.query.start) : start = "ALL"
         let end = new Date(req.query.end)
+
+
+        req.query.start ? start = new Date(req.query.start) : start = "ALL"
         req.query.end ? end = new Date(req.query.end) : end = "ALL"
 
         if(start != "ALL" && end != "ALL"){
@@ -149,7 +151,7 @@ const salesReport = async (req,res) => {
             res.render('admin/sales-report', {data})
         }else {
             const data = await Order.find({})
-            res.render('admin/sales-report', {data,status,start,end })
+            res.render('admin/sales-report', {data})
         }
         // const value = req.query.value || 'ALL'
         // if(value == "COD"){
@@ -170,9 +172,11 @@ const salesReport = async (req,res) => {
 const report = async (req,res) => {
     try {
         const value = req.query.value
+        const start = req.query.start
+        const end = req.query.end
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
-        await page.goto(`https://hufiko.shop/admin/sales-report?value=${value}` , {
+        await page.goto(`https://hufiko.shop/admin/sales-report?start=${start}&end=${end}` , {
         waitUntil:"networkidle2"
         })
         await page.setViewport({width: 1680 , height: 1050})

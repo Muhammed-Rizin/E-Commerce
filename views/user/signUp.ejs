@@ -52,7 +52,7 @@
             <!-- <div class="canvas__open"><i class="fa fa-bars"></i></div> -->
         </div>
     </header>
-    <section>
+    <!-- <section>
         <div class="col-lg-6 col-md-6 register">
             <h1>Register</h1>
             <div class="contact__form">
@@ -62,7 +62,7 @@
                     </p>
                     <% } %>
                         <form action="/register" method="post">
-                            <div class="row">
+                            <div class="row" >
                                 <div class="col-6">
                                     <input type="text" id="userName" name="name" placeholder="User Name" required>
                                 </div>
@@ -84,7 +84,55 @@
             </div>
             <p><a href="/login">Already member</a></p>
         </div>
-    </section>
+    </section> -->
+    <section class="vh-100 gradient-custom">
+        <div class="container py h">
+          <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 mt-5">
+              <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+      
+                  <div >
+      
+                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                    <p class="text-white-50 ">Please enter your login and password!</p>
+                    <% if(typeof message !=='undefined' ){%>
+                      <p style="color: red;">
+                        <%= message %>
+                      </p>
+                      <% } %>
+                    <form action="/register" method="post">
+                      <div class="form-outline form-white mb-3">
+                        <input type="text" id="userName" name="name" placeholder="User Name" required class="form-control form-control-lg" />
+                      </div>
+        
+                      <div class="form-outline form-white mb-3">
+                        <input type="email" id="email" name="email" placeholder="Email" required class="form-control form-control-lg" />
+                      </div>
+                      <div class="form-outline form-white mb-3">
+                        <input type="text" id="mobileNumber" name="mobile" placeholder="Phone" class="form-control form-control-lg" />
+                      </div>
+                      <div class="form-outline form-white mb-3">
+                        <input type="password" id="password" name="password" placeholder="Password"
+                        required class="form-control form-control-lg" />
+                      </div>
+        
+                      <button class="btn btn-outline-light btn-lg px-5" type="submit">Send otp</button>
+    
+                    </form>
+                  </div>
+      
+                  <div class="mt-2">
+                    <p class="mb-0">Already account? <a href="/login" class="text-white-50 fw-bold">Sign in</a>
+                    </p>
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 </body>
 
 <script src="/user/javaScript/jquery-3.3.1.min.js"></script>

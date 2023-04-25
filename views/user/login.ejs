@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="/user/styleSheet/login.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body>
@@ -75,7 +76,7 @@
     </div>
   </header>
   <!-- Header Section End -->
-  <section>
+  <!-- <section>
 
     <div class="col-lg-6 col-md-6 login">
       <h1>Log in</h1>
@@ -101,6 +102,51 @@
       </div>
       <p><a href="/forget">Forget Password?</a></p>
       <p>Don't have a account <a href="/register">Register?</a></p>
+    </div>
+  </section> -->
+  <section class="vh-100 gradient-custom">
+    <div class="container py h">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5 mt-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <div >
+  
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                <p class="text-white-50 ">Please enter your login and password!</p>
+                <% if(typeof message !=='undefined' ){%>
+                  <p style="color: red;">
+                    <%= message %>
+                  </p>
+                  <% } %>
+                <form action="/" method="post">
+                  <div class="form-outline form-white mb-4">
+                    <input type="text" id="name" name="name" required class="form-control form-control-lg" />
+                    <label class="form-label" for="name">User Name</label>
+                  </div>
+    
+                  <div class="form-outline form-white mb-4">
+                    <input type="password" id="password" name="password"  required class="form-control form-control-lg" />
+                    <label class="form-label" for="password">Password</label>
+                  </div>
+    
+                  <p class="small mb-1 pb-lg-2"><a class="text-white-50" href="/forget">Forgot password?</a></p>
+    
+                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                </form>
+              </div>
+  
+              <div class="mt-2">
+                <p class="mb-0">Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a>
+                </p>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </body>
@@ -139,5 +185,5 @@
     }
   })
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </html>
