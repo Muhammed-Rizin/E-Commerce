@@ -8,12 +8,12 @@ const moment = require('moment')
 const loadHome = async (req,res) => {
     try {
         const totalSale = await Order.aggregate([
-            {$match : {$and : [{status : {$ne : "cancelled"}},{status : {$ne : "Return Approved"}}]}},
+            {$match : {status : "Delivered"}},
             {$group : {_id : null, total : {$sum :"$amount"}}}])
         const totalUsers = await User.aggregate([{$group : {_id : null,total :{$count :{}}}}])
         const totalProduct = await Product.aggregate([{$group : {_id : null , total : {$count : {}}}}])
         const totalOrders = await Order.aggregate([
-            {$match : {$and : [{status : {$ne : "cancelled"}},{status : {$ne : "Return Approved"}}]}},
+            {$match : {status : "Delivered"}},
             {$group : {_id : null, total : {$count : {}}}}])
 
         const saleChart = await Order.aggregate([{$group : {_id : "$paymentMethod", total : {$count : {}}}}])
@@ -26,7 +26,7 @@ const loadHome = async (req,res) => {
         
         const salesByYear = await Order.aggregate([
             {$match : {
-                createdAt :{$gte : currentYear},status:{$ne : "cancelled"}
+                createdAt :{$gte : currentYear},status: "Delivered"
             }},
             {$group : {
                 _id : {$dateToString : {format : "%m", date : "$createdAt"}},

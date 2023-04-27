@@ -105,13 +105,13 @@ const sales = async (req,res) => {
             const data = await Order.aggregate([
                 {
                     $match : {
-                        $and : [{Date : {$gte : start}},{Date : {$lte : end}}]
+                        $and : [{Date : {$gte : start}},{Date : {$lte : end}},{status : "Delivered"}]
                     }
                 }
             ])
             res.render('admin/sales', {data,status,start : req.query.start,end :req.query.end })
         }else {
-            const data = await Order.find({})
+            const data = await Order.find({status : "Delivered"})
             res.render('admin/sales', {data,status,start,end })
         }
 
@@ -144,13 +144,13 @@ const salesReport = async (req,res) => {
             const data = await Order.aggregate([
                 {
                     $match : {
-                        $and : [{Date : {$gte : start}},{Date : {$lte : end}}]
+                        $and : [{Date : {$gte : start}},{Date : {$lte : end}},{status : "Delivered"}]
                     }
                 }
             ])
             res.render('admin/sales-report', {data})
         }else {
-            const data = await Order.find({})
+            const data = await Order.find({status : "Delivered"})
             res.render('admin/sales-report', {data})
         }
         // const value = req.query.value || 'ALL'

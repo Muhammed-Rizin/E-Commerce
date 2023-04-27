@@ -89,7 +89,7 @@ const verifyEmail = async (req,res) => {
 // Load Home 
 const loadHome = async (req, res) => {
     try {
-        const productData = await Product.find({})
+        const productData = await Product.find({blocked : false})
         const banner = await Banner.find({status : true}).sort({order : 1})
         if (req.session.user) {
             res.render('user/home', { user: req.session.user, data : productData , banner})
@@ -348,7 +348,7 @@ const addNewPassword = async (req,res) => {
 const loadProducts = async (req, res) => {
     try {
         const page = Number(req.query.page) || 1
-        const limit = 8
+        const limit = 9
         const skip = (page - 1) * limit
 
         let price = req.query.value 
@@ -368,7 +368,7 @@ const loadProducts = async (req, res) => {
 
         const productData = 
         await Product.aggregate([
-            {$match : {name : {$regex : '^'+Search, $options : 'i'},category : {$in : category}}},
+            {$match : {name : {$regex : '^'+Search, $options : 'i'},category : {$in : category},blocked : false}},
             {$sort : {price : sort}},
             {$skip : skip},
             {$limit : limit}
@@ -376,7 +376,8 @@ const loadProducts = async (req, res) => {
         // await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])
         // .sort({price : sort}).skip(skip).limit(limit)
 
-        const productCount = (await Product.find({name : {$regex : Search, $options :'i'}}).where("category").in([...category])).length
+        const productCount = (await Product.find(
+            {name : {$regex : Search, $options :'i'},blocked : false}).where("category").in([...category])).length
         
         const totalPage = Math.ceil(productCount / limit)
 

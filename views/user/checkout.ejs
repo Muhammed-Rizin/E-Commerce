@@ -290,7 +290,7 @@
                                 <div class="checkout__order__products">Product <span>Total</span></div>
                                 <ul class="checkout__total__products">
                                     <% data.forEach((value,index)=> { %>
-                                        <li><%= index+1 %>. <%= value.productId.name %> <span>$ <%= value.quantity%></span></li>
+                                        <li><%= index+1 %>. <%= value.productId.name %> <span>$ <%= value.productId.price%></span></li>
                                     <% }) %>
                                 </ul>
                                 <ul class="checkout__total__all">

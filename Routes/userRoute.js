@@ -36,7 +36,7 @@ userRoute.get('/product',userController.loadProducts)
 userRoute.post('/product',userController.loadProducts)
 
 // Product view
-userRoute.get('/view-product',session.notLogged,userController.viewProduct)
+userRoute.get('/view-product',userController.viewProduct)
 
 // Profile
 userRoute.get('/profile',session.notLogged,userController.viewProfile)

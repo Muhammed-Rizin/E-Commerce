@@ -169,8 +169,9 @@
                 <div class="col-lg-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
-                            <form action="/product?value=<%= price %>&category=<%= cat %>" method="get">
+                            <form action="/product" method="get">
                                 <input type="text" name="search" placeholder="Search...">
+                                <input type="hidden" name="category" value="<%= cat %>">
                                 <button type="submit"><span class="fa fa-search"></span></button>
                             
                         </div>
