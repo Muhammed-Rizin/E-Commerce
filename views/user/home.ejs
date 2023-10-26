@@ -31,7 +31,6 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
-    <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
@@ -62,7 +61,7 @@
             
         </div>
         <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="/user/assets/img/icon/search.png" alt=""></a>
+
             <a href="/wish-list"><img src="/user/assets/img/icon/heart.png" alt=""></a>
             <a href="/cart"><img src="/user/assets/img/icon/cart.png" alt=""> </a>
         </div>
@@ -71,9 +70,6 @@
             <p>Free shipping, 30-day return or refund guarantee.</p>
         </div>
     </div>
-    <!-- Offcanvas Menu End -->
-
-    <!-- Header Section Begin -->
     <header class="header">
         <div class="header__top">
             <div class="container">
@@ -123,13 +119,13 @@
                                     <li><a href="/order-history">Orders</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/contact">Contacts</a></li>
+                            
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="/user/assets/img/icon/search.png" alt=""></a>
+            
                         <a href="/wish-list"><img src="/user/assets/img/icon/heart.png" alt=""></a>
                         <a href="/cart"><img src="/user/assets/img/icon/cart.png" alt=""> </a>
                     </div>
@@ -138,10 +134,6 @@
             <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
     </header>
-    <!-- Header Section End -->
-
-    <!-- Hero Section Begin -->
-    
     <section class="hero">
         <div class="hero__slider owl-carousel">
             <% banner.forEach((value,index)=>{%>
@@ -153,41 +145,13 @@
                                     <h2><%= value.heading %></h2>
                                     <p><%= value.description %></p>
                                     <a href="/product" class="primary-btn">Shop now <i class="fa fa-arrow-right"></i></a>
-                                    <div class="hero__social">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                        <a href="#"><i class="fa fa-pinterest"></i></a>
-                                        <a href="#"><i class="fa fa-instagram"></i></a>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             <%}) %>
-                
-                    <!-- <div class="hero__items set-bg" data-setbg="/user/assets/img/hero/hero-2.jpg" style="background-image: url('/user/assets/img/hero/hero-2.jpg')">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xl-5 col-lg-7 col-md-8">
-                                    <div class="hero__text">
-                                        <h6>Summer Collection</h6>
-                                        <h2>Fall - Winter Collections 2030</h2>
-                                        <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                        commitment to exceptional quality.</p>
-                                        <a href="#" class="primary-btn">Shop now <span class="fa fa-arrow-right"></span></a>
-                                        <div class="hero__social">
-                                            <a href="#"><i class="fa fa-facebook"></i></a>
-                                            <a href="#"><i class="fa fa-twitter"></i></a>
-                                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                                            <a href="#"><i class="fa fa-instagram"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                
         </div>
     </section>
     <!-- Hero Section End -->
@@ -240,9 +204,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="filter__controls">
-                        <li class="active" data-filter="*">Best Sellers</li>
-                        <li data-filter=".new-arrivals">New Arrivals</li>
-                        <!-- <li data-filter=".hot-sales">Hot Sales</li> -->
+                        <li data-filter=".new-arrivals" class="active">New Arrivals</li>
                     </ul>
                 </div>
             </div>
@@ -263,13 +225,6 @@
                         <div class="product__item__text">
                             <h6><%= value.name %></h6>
                             <a onclick="addToCart('<%= value._id %>')" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
                             <h5>$<%= value.price %></h5>
                         </div>
                     </div>
@@ -278,64 +233,6 @@
             </div>
         </div>
     </section>
-    <!-- Product Section End -->
-
-    <!-- Categories Section Begin -->
-    
-    
-    <!-- <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="/user/assets/img/footer-logo.png" alt=""></a>
-                        </div>
-                        <p>The customer is at the heart of our unique business model, which includes design.</p>
-                        <a href="#"><img src="/user/assets/img/payment.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Clothing Store</a></li>
-                            <li><a href="#">Trending Shoes</a></li>
-                            <li><a href="#">Accessories</a></li>
-                            <li><a href="#">Sale</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>
-                            <li><a href="#">Return & Exchanges</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>NewLetter</h6>
-                        <div class="footer__newslatter">
-                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                            <form action="#">
-                                <input type="text" placeholder="Your email">
-                                <button type="submit"><i class="bi bi-envelope"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </footer> -->
-    <!-- Footer Section End -->
-
-    <!-- Search Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>

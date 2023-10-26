@@ -1,3 +1,9 @@
+body {
+  height: 100vh;
+  background-color: #d9d9d9 !important;
+  width: 100% !important;
+  overflow-y: hidden;
+}
 .register {
   position: absolute;
   left: 20%;
@@ -52,3 +58,104 @@ form div {
 #password-required{
   display: none;
 } */
+
+
+.login-section {
+  margin-top: 2rem;
+  width: 100vw !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-container {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #333;
+}
+
+p {
+  color: #666;
+}
+
+.form-group {
+  text-align: left;
+}
+
+label {
+  display: block;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-button {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background: #45a049;
+}
+
+.forgot-password {
+  color: #444;
+}
+
+.register-link {
+  color: #444;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.form-group {
+  text-align: left;
+}
+
+label {
+  display: block;
+  color: #333;
+}
+
+input {
+  width: 100%;
+  padding: 5px; /* Reduce the input field padding */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-button {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}

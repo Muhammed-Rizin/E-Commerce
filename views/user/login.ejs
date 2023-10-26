@@ -75,84 +75,34 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="canvas__open"><i class="fa fa-bars"></i></div> -->
     </div>
   </header>
-  <!-- Header Section End -->
-  <!-- <section>
-
-    <div class="col-lg-6 col-md-6 login">
-      <h1>Log in</h1>
-      <div class="contact__form">
-        <% if(typeof message !=='undefined' ){%>
-          <p style="color: red;">
-            <%= message %>
-          </p>
-          <% } %>
-            <form action="/" method="post">
-              <div class="row">
-                <div class="col-6">
-                  <input type="text" id="name" name="name" placeholder="User Name" required>
-                </div>
-                <div class="col-6">
-                  <input type="password" id="password" name="password" placeholder="Password" required>
-                </div>
-                <div class="col-4">
-                  <button type="submit" class="site-btn">Log in</button>
-                </div>
+  <section class="login-section">
+    <div class="login-container">
+      <div class="login-content">
+          <h1>Login</h1>
+          <p>Please enter your login and password.</p>
+          <% if(typeof message !=='undefined' ){%>
+            <p style="color: red;">
+              <%= message %>
+            </p>
+            <% } %>
+          <form action="/" method="post">
+              <div class="form-group">
+                  <label for="name">User Name</label>
+                  <input type="text" id="name" name="name" required>
               </div>
-            </form>
-      </div>
-      <p><a href="/forget">Forget Password?</a></p>
-      <p>Don't have a account <a href="/register">Register?</a></p>
-    </div>
-  </section> -->
-  <section class="vh-100 gradient-custom">
-    <div class="container py h">
-      <div class="row d-flex justify-content-center align-items-center">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5 mt-5">
-          <div class="card bg-dark text-white" style="border-radius: 1rem;">
-            <div class="card-body p-5 text-center">
-  
-              <div >
-  
-                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                <p class="text-white-50 ">Please enter your login and password!</p>
-                <% if(typeof message !=='undefined' ){%>
-                  <p style="color: red;">
-                    <%= message %>
-                  </p>
-                  <% } %>
-                <form action="/" method="post">
-                  <div class="form-outline form-white mb-4">
-                    <input type="text" id="name" name="name" required class="form-control form-control-lg" />
-                    <label class="form-label" for="name">User Name</label>
-                  </div>
-    
-                  <div class="form-outline form-white mb-4">
-                    <input type="password" id="password" name="password"  required class="form-control form-control-lg" />
-                    <label class="form-label" for="password">Password</label>
-                  </div>
-    
-                  <p class="small mb-1 pb-lg-2"><a class="text-white-50" href="/forget">Forgot password?</a></p>
-    
-                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
-                </form>
+              <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" id="password" name="password" required>
               </div>
-  
-              <div class="mt-2">
-                <p class="mb-0">Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a>
-                </p>
-              </div>
-  
-            </div>
-          </div>
-        </div>
+              <button type="submit" class="login-button">Login</button>
+          </form>
+          <p class="forgot-password"><a href="/forget">Forgot password?</a></p>
+          <p class="register-link">Don't have an account? <a href="/register">Sign Up</a></p>
       </div>
     </div>
-  </section>
+</section>
 </body>
 
 <script src="/user/javaScript/jquery-3.3.1.min.js"></script>
