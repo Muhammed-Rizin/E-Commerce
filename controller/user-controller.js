@@ -111,16 +111,16 @@ const postLogin = async (req, res) => {
             if(result.blocked == false){
                 const pass = await bcrypt.compare(password, result.Password)
                 if (pass) {
-                    if (result.mobileVerfied == true) {
+                    // if (result.mobileVerfied == true) {
                         if (result.emailVerified == true) {
                             req.session.user = userName
                             res.redirect('/')
                         } else {
                             res.render('user/login', { message: "Email Not Verified" })
                         }
-                    } else {
-                        res.render('user/login', { message: "Mobile Not Verified" })
-                    }
+                    // } else {
+                    //     res.render('user/login', { message: "Mobile Not Verified" })
+                    // }
                 } else {
                     res.render('user/login', { message: "Entered Password is Incorrect" })
                 }
@@ -191,15 +191,25 @@ const postRegister = async (req, res) => {
                     res.render('user/signUp', { message: 'Mobile number already exists' })
                 } else {
                     sendVerifyMail(userName,email)
-                    const userMObile = '+91' + mobileNumber
-                    await client.verify.v2.services(services)    
-                        .verifications
-                        .create({
-                            to: userMObile,
-                            channel: 'sms'
-                        })
+                    // const userMObile = '+91' + mobileNumber
+                    // await client.verify.v2.services(services)    
+                    //     .verifications
+                    //     .create({
+                    //         to: userMObile,
+                    //         channel: 'sms'
+                    //     })
 
-                    res.render('user/varification')
+                    // res.render('user/varification')
+                    const data = new User({
+                        user_name: req.session.name,
+                        email: req.session.email,
+                        mobile_number: req.session.mobile,
+                        Password: req.session.password,
+                        mobileVerfied: true
+                    })
+        
+                    const result = await data.save()
+                    res.render('user/login', {message : 'Please Check Your Mail'})
                 }
             }
         }
@@ -221,15 +231,8 @@ const postOtp = async (req, res) => {
             })
 
         if (result.valid === true) {
-            const data = new User({
-                user_name: req.session.name,
-                email: req.session.email,
-                mobile_number: req.session.mobile,
-                Password: req.session.password,
-                mobileVerfied: true
-            })
-
-            const result = await data.save()
+            
+            await User.findOneAndUpdate({user_name : req.session.name}, {$set : {mobileVerfied : true}})
 
             if (result) {
                 res.render('user/login', {message : 'Please Check Your Mail'})
