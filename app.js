@@ -50,4 +50,4 @@ app.use((req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Server Connected"));
+app.listen(process.env.PORT, () => console.log("Server Connected"));
