@@ -1,4 +1,4 @@
-.login{
+.login {
   position: absolute;
   top: 30%;
   left: 30%;
@@ -23,17 +23,17 @@ form div {
   margin-top: 1rem;
   color: #000000;
 }
-.login h1{
+.login h1 {
   font-size: 20px;
-	color: #000000;
-	font-weight: 900;
-	border: none;
-	text-transform: uppercase;
-	display: inline-block;
-	padding: 14px 100px;
+  color: #000000;
+  font-weight: 900;
+  border: none;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 14px 100px;
 }
 
-.login p a{
+.login p a {
   text-decoration: none;
   color: #365fe5;
 }

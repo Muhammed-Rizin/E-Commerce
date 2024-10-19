@@ -1,110 +1,109 @@
-const express = require('express')
-const userRoute = express()
-const userController = require('../controller/user-controller')
-const session = require('../middleware/user-session')
+const express = require("express");
+const userRoute = express();
+const userController = require("../controller/user-controller");
+const { logged, notLogged } = require("../middleware/user-session");
 
 // Home
-userRoute.get('/',userController.loadHome)
-userRoute.post('/',userController.postLogin)
+userRoute.get("/", userController.loadHome);
+userRoute.post("/", userController.postLogin);
 
 // Login
-userRoute.get('/login',session.logged,userController.logIn)
+userRoute.get("/login", logged, userController.logIn);
 
 // Log Out
-userRoute.get('/logout',userController.logOut)
+userRoute.get("/logout", userController.logOut);
 
 // Register
-userRoute.get('/register',session.logged,userController.register)
-userRoute.post('/register',session.logged,userController.postRegister)
+userRoute.get("/register", logged, userController.register);
+userRoute.post("/register", logged, userController.postRegister);
 
 // OTP
-userRoute.post('/otp',session.logged,userController.postOtp)
+userRoute.post("/otp", logged, userController.postOtp);
 
 // Forget Password
-userRoute.get('/forget',session.logged,userController.forget)
-userRoute.post('/forget',session.logged,userController.resetPassword)
+userRoute.get("/forget", logged, userController.forget);
+userRoute.post("/forget", logged, userController.resetPassword);
 
 // Reset Password
-userRoute.get('/resetpass',session.logged,userController.newPassword)
-userRoute.post('/resetpass',userController.addNewPassword)
+userRoute.get("/resetpass", logged, userController.newPassword);
+userRoute.post("/resetpass", userController.addNewPassword);
 
 // Verify Email
-userRoute.get('/verify',session.logged,userController.verifyEmail)
+userRoute.get("/verify", logged, userController.verifyEmail);
 
 // Product
-userRoute.get('/product',userController.loadProducts)
-userRoute.post('/product',userController.loadProducts)
+userRoute.get("/product", userController.loadProducts);
+userRoute.post("/product", userController.loadProducts);
 
 // Product view
-userRoute.get('/view-product',userController.viewProduct)
+userRoute.get("/view-product", userController.viewProduct);
 
 // Profile
-userRoute.get('/profile',session.notLogged,userController.viewProfile)
-userRoute.post('/update-profile',userController.updateData)
+userRoute.get("/profile", notLogged, userController.viewProfile);
+userRoute.post("/update-profile", userController.updateData);
 
 // Cart
-userRoute.get('/cart',session.notLogged,userController.cart)
+userRoute.get("/cart", notLogged, userController.cart);
 
 // add to cart
-userRoute.post('/add-to-cart',session.notLogged,userController.addToCart)
+userRoute.post("/add-to-cart", notLogged, userController.addToCart);
 
-// change quantity 
-userRoute.post('/change-product-quantity',userController.changeQuantity)
+// change quantity
+userRoute.post("/change-product-quantity", userController.changeQuantity);
 
 // delete Cart Item
-userRoute.post('/delete-cart-item',userController.deleteCartItem)
+userRoute.post("/delete-cart-item", userController.deleteCartItem);
 
 // Check Out
-userRoute.get('/checkout',session.notLogged,userController.checkout)
+userRoute.get("/checkout", notLogged, userController.checkout);
 
 // Add Adress
-userRoute.post('/add-address',userController.addAddress)
+userRoute.post("/add-address", userController.addAddress);
 
 // Delete Address
-userRoute.get('/delete-address',session.notLogged,userController.deleteAddress)
+userRoute.get("/delete-address", notLogged, userController.deleteAddress);
 
 // Place Order
-userRoute.post('/place-order',userController.placeOrder)
+userRoute.post("/place-order", userController.placeOrder);
 
 // Order Placed
-userRoute.get('/order-placed',session.notLogged,userController.orderPlaced)
-userRoute.post('/verify-payment',userController.verifyPayment)
+userRoute.get("/order-placed", notLogged, userController.orderPlaced);
+userRoute.post("/verify-payment", userController.verifyPayment);
 
 // order list
-userRoute.get('/orders',session.notLogged,userController.orderPlaced)
+userRoute.get("/orders", notLogged, userController.orderPlaced);
 
-userRoute.get('/order-history',session.notLogged,userController.orderHistory)
+userRoute.get("/order-history", notLogged, userController.orderHistory);
 
 // View Order
-userRoute.get('/view-order',session.notLogged,userController.viewOrder)
+userRoute.get("/view-order", notLogged, userController.viewOrder);
 
 // Return COD Order
-userRoute.get('/return',session.notLogged,userController.returnConforme)
-userRoute.post('/return-order',session.notLogged,userController.returnOrder)
+userRoute.get("/return", notLogged, userController.returnConformed);
+userRoute.post("/return-order", notLogged, userController.returnOrder);
 
 // Cancel COD Order
-userRoute.get('/cancel-order',session.notLogged,userController.cancelOrder)
+userRoute.get("/cancel-order", notLogged, userController.cancelOrder);
 
 // Wishlist
-userRoute.get('/wish-list',session.notLogged,userController.wishList)
+userRoute.get("/wish-list", notLogged, userController.wishList);
 
 // Add to wishlist
-userRoute.post('/add-to-wishlist',session.notLogged,userController.addToWishlist)
+userRoute.post("/add-to-wishlist", notLogged, userController.addToWishlist);
 
-// Delete from Wish list 
-userRoute.post('/delete-wishlist-item',session.notLogged,userController.deleteWishItem)
+// Delete from Wish list
+userRoute.post("/delete-wishlist-item", notLogged, userController.deleteWishItem);
 
 // Add to cart wish list
-userRoute.post('/add-to-cart-wishlist',session.notLogged,userController.addToCartWishlist)
+userRoute.post("/add-to-cart-wishlist", notLogged, userController.addToCartWishlist);
 
 // Apply coupon
-userRoute.post('/apply-coupon',userController.applyCoupon)
+userRoute.post("/apply-coupon", userController.applyCoupon);
 
 // Contact
-userRoute.get('/contact',userController.contact)
+userRoute.get("/contact", userController.contact);
 
 // About
-userRoute.get('/about',userController.about)
+userRoute.get("/about", userController.about);
 
-
-module.exports =userRoute
+module.exports = userRoute;

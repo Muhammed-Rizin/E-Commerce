@@ -9,9 +9,8 @@
 
     thead {
       border-bottom: 1px solid #f2f2f2;
-      
+
       tr {
-        
         th {
           color: $heading-color;
           font-size: 16px;
@@ -23,7 +22,6 @@
     }
 
     tbody {
-
       tr {
         border-bottom: 1px solid #f2f2f2;
 
@@ -61,7 +59,6 @@
             width: 175px;
 
             .quantity {
-
               .pro-qty-2 {
                 width: 80px;
 
@@ -91,7 +88,6 @@
           }
 
           &.cart__close {
-
             i {
               font-size: 18px;
               color: $heading-color;
@@ -110,7 +106,6 @@
 }
 
 .continue__btn {
-
   &.update__btn {
     text-align: right;
 
